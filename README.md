@@ -13,23 +13,22 @@ In this project, you will create functions to control a virtual robot to navigat
 - Numpy
 
 ### Code
-- robot.py <br />
+- robot.py:  
   This script establishes the robot class. This is the only script that you should be modifying, and the main script that you   will be submitting with your project.
-- maze.py <br />
+- maze.py:  
   This script contains functions for constructing the maze and for checking for walls upon robot movement or sensing.
-- tester.py <br />
+- tester.py:  
   This script will be run to test the robot’s ability to navigate mazes.
-- showmaze.py <br />
+- showmaze.py:  
   This script can be used to create a visual demonstration of what a maze looks like.
-- test_maze_##.txt <br />
+- test_maze_##.txt:  
   These files provide three sample mazes upon which to test your robot. Feel free to create your own mazes using the specifications above.
 
 ### Run
-- To run the tester, you can do so from the command line with a command like the following: <br />
-  python tester.py test_maze_01.txt. 
-
-- The maze visualization follows a similar syntax, e.g. <br /> 
-  python showmaze.py test_maze_01.txt. 
+- To run the tester, you can do so from the command line with a command like the following:  
+  ```python tester.py test_maze_01.txt```
+- The maze visualization follows a similar syntax, e.g.  
+  ```python showmaze.py test_maze_01.txt```
 - The script uses the turtle module to visualize the maze; you can click on the window with the visualization after drawing is complete to close the window.
 
 ### Project Description
