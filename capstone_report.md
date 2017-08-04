@@ -7,19 +7,34 @@ August 1st, 2017
 _(approx. 1-2 pages)_
 
 ### Project Overview
-This project is based on the Micromouse competition in which a small robot mouse needs to solve a virtual maze. This means that the mouse needs to find a way from the starting position to the defined destination position (e.g center of maze or exit) completely by its own.
-
-To find an optimal (and fastest way) to the destination the mouse needs to perform following steps:
-- It needs to know the sturcture of the maze, so it will map the maze (walls, paths, deadends) until it finds the defined destination.
-- After that the mouse will peform several runs from the starting point to explore the best and fastest pathes available. the mouse uses what it has learned from the runs before.
+This project is based on the Micromouse competition in which a small robot mouse needs to solve a virtual maze. This means that the mouse needs to find a way from the starting position to a defined destination position (e.g center of maze or exit) completely by its own.
 
 The goal is to reach the destination point as fast as possible. This project covers all relevant technical steps for a simulated virtual robot mouse to achieve this goal in a virtual maze.
 
 ### Problem Statement
-In this section, you will want to clearly define the problem that you are trying to solve, including the strategy (outline of tasks) you will use to achieve the desired solution. You should also thoroughly discuss what the intended solution will be for this problem. Questions to ask yourself when writing this section:
+_In this section, you will want to clearly define the problem that you are trying to solve, including the strategy (outline of tasks) you will use to achieve the desired solution. You should also thoroughly discuss what the intended solution will be for this problem. Questions to ask yourself when writing this section:_
 - _Is the problem statement clearly defined? Will the reader understand what you are expecting to solve?_
 - _Have you thoroughly discussed how you will attempt to solve the problem?_
 - _Is an anticipated solution clearly defined? Will the reader understand what results you are looking for?_
+
+The simulated virtual robot mouse and the virtual maze are given as a simplified model (code base). So what is left for the problem statement is the question, what needs to be done that the mouse finds the fastest way to a defined destination? 
+
+To find an optimal (and fastest way) to the destination the mouse needs to perform several runs from starting location to final destination.
+
+Steps to take and how to achieve
+- Find the goal -> Localization and motion
+- Get to know the structure of the maze -> Filters
+- Evaluate best paths -> Search, Control
+
+
+--> Functions, logic and model for learning from several runs
+
+
+**
+- It needs to know the sturcture of the maze, so it will map the maze (walls, paths, deadends) until it finds the defined destination.
+- After that the mouse will peform several runs from the starting point to explore the best and fastest pathes available. the mouse uses what it has learned from the runs before. **
+
+
 
 ### Metrics
 In this section, you will need to clearly define the metrics or calculations you will use to measure performance of a model or result in your project. These calculations and metrics should be justified based on the characteristics of the problem and problem domain. Questions to ask yourself when writing this section:
