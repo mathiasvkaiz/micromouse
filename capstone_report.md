@@ -60,15 +60,7 @@ In this section, you will be expected to analyze the data you are using for the 
 - _If a dataset is **not** present for this problem, has discussion been made about the input space or input data for your problem?_
 - _Are there any abnormalities or characteristics about the input space or dataset that need to be addressed? (categorical variables, missing values, outliers, etc.)_
 
-
-
-### Exploratory Visualization
-In this section, you will need to provide some form of visualization that summarizes or extracts a relevant characteristic or feature about the data. The visualization should adequately support the data being used. Discuss why this visualization was chosen and how it is relevant. Questions to ask yourself when writing this section:
-- _Have you visualized a relevant characteristic or feature about the dataset or input data?_
-- _Is the visualization thoroughly analyzed and discussed?_
-- _If a plot is provided, are the axes, title, and datum clearly defined?_
-
------
+----
 
 The project is based on three test mazes each represented by an even grid of squares. Each maze is fully surrounded by walls. Beside the outside walls each square can have multiple walls that block movement. Starting point is always placed in the bottom-left corner and has a right, a bottom and a left wall opened to the top. The robot will start facing upwards. The goal room is placed inside the center of the maze and has a size of 2x2 squares.
 
@@ -92,6 +84,19 @@ Starting point has a 1 as we only have an opening upwards (1 = 1*1 + 0*2 + 0*4 +
 
 
 
+
+
+### Exploratory Visualization
+In this section, you will need to provide some form of visualization that summarizes or extracts a relevant characteristic or feature about the data. The visualization should adequately support the data being used. Discuss why this visualization was chosen and how it is relevant. Questions to ask yourself when writing this section:
+- _Have you visualized a relevant characteristic or feature about the dataset or input data?_
+- _Is the visualization thoroughly analyzed and discussed?_
+- _If a plot is provided, are the axes, title, and datum clearly defined?_
+
+-----
+
+Based on the description about the dataset in the chapter before you can see the mapping from bit-wise numbering to maze structure:
+
+
 Maze 1 Structure | Maze 1 Plot 
 --- | --- 
 ![alt text](images/test_maze1.png "Test Maze 1 Structure")| ![alt text](images/test_maze1_plot.png "Test Maze 1 plot")
@@ -109,6 +114,8 @@ Maze 3 Structure | Maze 3 Plot
 ![alt text](images/test_maze3.png "Test Maze 3 Structure")| ![alt text](images/test_maze3_plot.png "Test Maze 3d plot")
 
 
+You can see that the number data reflects the similar structure on striking spots. For example the edges are having all the same structure and shape so we can see same number in the structure files -> orange spots.
+In the red shaped areas you can see the according walls and opening definitions for the center 2x2 goal square (*left and right side are same in text and plot but top and bottom are vice versa in text structure file*).
 
 ### Algorithms and Techniques
 In this section, you will need to discuss the algorithms and techniques you intend to use for solving the problem. You should justify the use of each one based on the characteristics of the problem and the problem domain. Questions to ask yourself when writing this section:
