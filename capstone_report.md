@@ -91,6 +91,25 @@ For example, if we have a number 10 in the text file this means that this square
 Starting point has a 1 as we only have an opening upwards (1 = 1*1 + 0*2 + 0*4 + 0*8)
 
 
+
+Maze 1 Structure | Maze 1 Plot 
+--- | --- 
+![alt text](images/test_maze1.png "Test Maze 1 Structure")| ![alt text](images/test_maze1_plot.png "Test Maze 1 plot")
+
+
+
+Maze 2 Structure | Maze 2 Plot 
+--- | --- 
+![alt text](images/test_maze2.png "Test Maze 2 Structure")| ![alt text](images/test_maze2_plot.png "Test Maze 2 plot")
+
+
+
+Maze 3 Structure | Maze 3 Plot 
+--- | --- 
+![alt text](images/test_maze3.png "Test Maze 3 Structure")| ![alt text](images/test_maze3_plot.png "Test Maze 3d plot")
+
+
+
 ### Algorithms and Techniques
 In this section, you will need to discuss the algorithms and techniques you intend to use for solving the problem. You should justify the use of each one based on the characteristics of the problem and the problem domain. Questions to ask yourself when writing this section:
 - _Are the algorithms you will use, including any default variables/parameters in the project clearly defined?_
