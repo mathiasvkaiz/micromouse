@@ -17,13 +17,15 @@ _In this section, you will want to clearly define the problem that you are tryin
 - _Have you thoroughly discussed how you will attempt to solve the problem?_
 - _Is an anticipated solution clearly defined? Will the reader understand what results you are looking for?_
 
+----
+
 The simulated virtual robot mouse and the virtual maze are given as a simplified model (code base). So what is left for the problem statement is the question, what needs to be done that the mouse finds the fastest way to a defined destination? 
 
-To find an optimal (and fastest way) to the destination the mouse needs to perform several runs from starting location to final destination.
+To find an optimal (and fastest way) to the destination the mouse needs to perform two runs from starting location to final destination. On the first run the robot is allowed to explore the environment and create a map of the maze. It needs to find the goal in this attemp but it still can explore the environment afterwards. In the second run the robot starts again from starting point and hast to find the goal as fast as possible.
 
 Steps to take and how to achieve
-- Find the goal -> Localization and motion
-- Get to know the structure of the maze -> Filters
+- Find the goal -> Localization and motion (in the first run)
+- Get to know the structure of the maze -> Filters (first and several other runs)
 - Evaluate best paths -> Search, Control
 
 
@@ -40,6 +42,12 @@ Steps to take and how to achieve
 In this section, you will need to clearly define the metrics or calculations you will use to measure performance of a model or result in your project. These calculations and metrics should be justified based on the characteristics of the problem and problem domain. Questions to ask yourself when writing this section:
 - _Are the metrics you’ve chosen to measure the performance of your models clearly discussed and defined?_
 - _Have you provided reasonable justification for the metrics chosen based on the problem and solution?_
+
+----
+
+Since the robot mouse is expected to find the destination spot as fast as possible having only two runs the evaulation of the score will be on one important metric -> needed time steps. The rules only allow two runs and that the robot can explore the maze in the first run as long as it wants (maximum of 1000 steps for first and second run together). Therefore the second run in the main scoring run meaning that each time step in the second run counts as one. The first run is considered one thirtieth the number of time steps needed additionaly.
+
+In my opinion for this scenario there is no need regard other metrics. We have a clear defined rule set and a clear defined goal. We don't need to evaluate other metrics like safety or realibility (as for the smartcab scenario). If the robot is driving into a wall it increases the needed points and has therefor already a penalty on scoring. It also has to reach the goal in the given time frame (1000 steps) otherwise it was not successful. 
 
 
 ## II. Analysis
