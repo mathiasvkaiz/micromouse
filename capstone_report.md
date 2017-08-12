@@ -70,7 +70,7 @@ First line of the dataset defines the number of squares for witdh and height of 
 - Second maze consist of 14x14 squares
 - Third maze consists of 16x16 squares
 
-Each comma seperated cell in the following lines describe the nature of each cell in terms of walls and openings. Here a four-bit number system is used where a closed wall is represented by 0 and an opening is represented by 1. The first row defines the bottom line of the maze whereas the last row of the text file defines the upper line of teh maze. First number of each row represents the left most square whereas the last number of the row defines the right most square of the cell.
+Each comma seperated cell in the following lines describe the nature of each cell in terms of walls and openings. Here a four-bit number system is used where a closed wall is represented by 0 and an opening is represented by 1. The first row defines the leftmost column of the maze whereas the last row of the text file defines the rightmost column of the maze. 
 
 There are in total four registers (bit system) that defines each direction:
 - 1st register defines up
@@ -115,7 +115,12 @@ Maze 3 Structure | Maze 3 Plot
 
 
 You can see that the number data reflects the similar structure on striking spots. For example the edges are having all the same structure and shape so we can see same number in the structure files -> orange spots.
-In the red shaped areas you can see the according walls and opening definitions for the center 2x2 goal square (*left and right side are same in text and plot but top and bottom are vice versa in text structure file*).
+In the red shaped areas you can see the according walls and opening definitions for the center 2x2 goal square (*The first row defines the leftmost column of the maze whereas the last row of the text file defines the rightmost column of the maze, so you can turn the structure file in an -90 degree angle to get the corresponding plot structure*).
+
+In addition possible pitfalls could cause some unwanted behaviour to the agent. For example, the violet marked ovals represent dead ends where the robot can only move in one direction. Another pitfall could be that (green ovals) infinite loops could occur as the robot moves in circles. 
+
+The possible handling of these pitfalls will be discussed in the next chapter.
+
 
 ### Algorithms and Techniques
 In this section, you will need to discuss the algorithms and techniques you intend to use for solving the problem. You should justify the use of each one based on the characteristics of the problem and the problem domain. Questions to ask yourself when writing this section:
