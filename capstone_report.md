@@ -86,6 +86,7 @@ For additional input data the robot has three obstacles sensors in direction to 
 
 Movement of the robot is assumed to be perfect (no path deviation) and if the robot moves into a wall it stays where it was.
 
+Based on the robots behaviour you can see (numbers from 0 to 30 in Maze1 plot) that the minimum steps for the optimal path is 30 squares. As the robot can move 3 squares in one time step we get an optimal time period of 17 time steps to find the goal. 
 
 
 
