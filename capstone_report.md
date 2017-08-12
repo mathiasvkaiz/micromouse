@@ -82,6 +82,9 @@ For example, if we have a number 10 in the text file this means that this square
 (10 = 0*1 + 1*2 + 0*4 + 1*8).
 Starting point has a 1 as we only have an opening upwards (1 = 1*1 + 0*2 + 0*4 + 0*8)
 
+For additional input data the robot has three obstacles sensors in direction to right, left and upwards. These sensors can detect the number of open squares in each sensor direction or recognizes walls. On each time step the robot can rotate clockwise or counterclockwise for ninety degrees. After that it moves up to three squares in that or opposite (backwards) direction. After the movement the next time step starts and the sensors return new data.
+
+Movement of the robot is assumed to be perfect (no path deviation) and if the robot moves into a wall it stays where it was.
 
 
 
@@ -119,7 +122,7 @@ In the red shaped areas you can see the according walls and opening definitions 
 
 In addition possible pitfalls could cause some unwanted behaviour to the agent. For example, the violet marked ovals represent dead ends where the robot can only move in one direction. Another pitfall could be that (green ovals) infinite loops could occur as the robot moves in circles. 
 
-The possible handling of these pitfalls will be discussed in the next chapter.
+The handling of these pitfalls will be discussed in the next chapter.
 
 
 ### Algorithms and Techniques
