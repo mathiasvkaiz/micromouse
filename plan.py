@@ -1,4 +1,6 @@
 import globals
+import random
+import copy
 
 from IPython.core import debugger
 debug = debugger.Pdb().set_trace

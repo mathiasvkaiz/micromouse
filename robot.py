@@ -6,7 +6,7 @@ from maze import Maze
 
 import sys
 import numpy as np
-import random
+import os
 import copy
 
 from IPython.core import debugger
@@ -32,6 +32,38 @@ class Robot(object):
         self.explored_timestep = 0
         self.overall_tiestep = 0
         self.max_timestep = globals._maxtimespan
+
+        # different explore algorithms
+        try:
+          	self.explorer_name = os.environ['EXPLORER']
+        except:
+          	self.explorer_name = 'astar'
+
+      	if self.explorer_name=='random':
+    		self.explorer = self.plan.random
+    	elif self.explorer_name=='recursive':
+    		self.explorer = self.plan.recursive
+    	elif self.explorer_name=='astar':
+    		self.explorer = self.plan.astar
+    	else:
+    		self.explorer = self.plan.astar
+
+
+
+      	# different search path algorithms for best path
+        try:
+            self.search_name = os.environ['SEARCH']
+        except:
+           	self.search_name = 'astar'
+
+       	if self.search_name=='recursive':
+        	self.search = self.plan.recursive
+        elif self.search_name=='dp':
+        	self.search = self.plan.dp
+        elif self.search_name=='astar':
+        	self.search = self.plan.astar
+        else:
+        	self.search = self.plan.astar
         
         
         
@@ -88,6 +120,7 @@ class Robot(object):
 
         rotation = 0
         movement = 0
+        	
         
         # for report purposes
         old_location = [self.location[0], self.location[1]]
@@ -102,20 +135,21 @@ class Robot(object):
         if (self.map.check_coverage() and self.plan.is_goal_reached) or self.timestep == self.max_timestep - self.timespan:
             # Reset everything
             self.reset()
+
             
-            # different search path algorithms for best path
-            self.plan.path, self.plan.policy = self.plan.astar(True)
+
+            self.plan.path, self.plan.policy = self.search(True) #self.plan.astar(True)
 #             self.plan.path, self.plan.policy = self.plan.dp(True)
 #             self.plan.path, self.plan.policy = self.plan.recursive(True)
             
             # Debug Reports
-            print ('MOVED') 
+            print ('MOVED by ' + self.explorer_name) 
             print (np.rot90(self.map.moved))
             
             print ('') 
             print ('') 
             
-            print ('PATH') 
+            print ('PATH by ' + self.search_name) 
             print (np.rot90(self.plan.policy))
             
         
@@ -139,9 +173,8 @@ class Robot(object):
                 else:
                     self.plan.set_goal()
                     self.plan.is_looking_for_start = False
-            
-            # different explore algorithms
-            steering, movement = self.plan.astar()
+
+            steering, movement = self.explorer() #self.plan.astar()
 #             steering, movement = self.plan.random()
 #             steering, movement = self.plan.recursive()
 
