@@ -853,6 +853,16 @@ In this section, you will need to discuss the process of improvement you made up
 - _Are intermediate and final solutions clearly reported as the process is improved?_
 
 
+-----
+
+In this project there were so many refinemnets steps that it is not possible to show all steps here in this report. (Please refer to the commit history for all refiement insights) I want to state out two major refinement steps that needs to be done to get the robot working.
+
+In one first apporach the robot was not able to move backwards. It was only able to move forwards. In combination with the sensing into three directions 'left', 'right' and 'forward' this lead to a major issues especially in dead ends for 'Recursive Explorarion'. Just to recapitulate the 'Resursive Exploration' moves back to a fromer cell in case there are no open possibilities lieft. But how could i solve this without enabling the robot to move backwards. You can see the improvments in the `plan.py`in `check_movement()`. 
+
+Another refinement done by me was the extension of the 'A Star Exploration' algorithm by heuristic values. The 'A Star Search' algorithm is used for known mazes. I wanted to adopt this algorith for a unknon maze, so that it could explore the maze based on heuristic values. This means that it will calculate the expetced distance from the actual position to the destination. Based on these values it decides which cell to move next to. In case the cell is not permissable it recalclates (based on the ne sensor results) a new path. You can see the improvments in the `plan.py` in `make_heuristic()` and `astar_search()`. 
+
+
+
 ## IV. Results
 _(approx. 2-3 pages)_
 
