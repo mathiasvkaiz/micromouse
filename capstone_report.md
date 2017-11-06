@@ -129,6 +129,8 @@ The handling of these pitfalls will be discussed in the next chapter.
 ### Algorithms and Techniques
 In this section, you will need to discuss the algorithms and techniques you intend to use for solving the problem. You should justify the use of each one based on the characteristics of the problem and the problem domain. Questions to ask yourself when writing this section:
 
+-----
+
 This project is separated into two different phase. The first phase (Exploration) is to explore the maze with the goal to reach the defined destination. In the second phase (Search) the robot should calculate the shortest path and get to the destination as fast as possible.
 
 For both phases i have defined different techniques and algorithms to accomplish each phase.
@@ -158,6 +160,10 @@ Dynamic Programming algorith is based on the Lecture of "Artifical Intelligence 
 In this section, you will need to provide a clearly defined benchmark result or threshold for comparing across performances obtained by your solution. The reasoning behind the benchmark (in the case where it is not an established result) should be discussed. Questions to ask yourself when writing this section:
 - _Has some result or value been provided that acts as a benchmark for measuring performance?_
 - _Is it clear how this result or value was obtained (whether by data or by hypothesis)?_
+
+----
+
+The different combinations of Explor and Search algorithm/techniques will be compared based on the reached score. For benchmark i assume to have A Star Exploration and A Star Search. This will be evaluated and proofed in a later chapter.
 
 
 ## III. Methodology
