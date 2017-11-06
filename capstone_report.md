@@ -873,6 +873,99 @@ In this section, the final model and any supporting qualities should be evaluate
 - _Is the model robust enough for the problem? Do small perturbations (changes) in training data or the input space greatly affect the results?_
 - _Can results found from the model be trusted?_
 
+-------
+
+As pointed out in Section `Exploratory Visualization` the following results are considered as best fitting model.
+
+Maze | Path Length | Fastes Moves
+--- | --- | --- 
+1 | 30 | 17
+2 | 43 | 23
+3 | 49 | 25
+
+
+As iwe have a combination of two phases and therefor different combinations i want to state out the results for each possible combination.
+
+
+
+<table>
+  <tbody>
+    <tr>
+      <th>Exploration</th>
+      <th>Search</th>
+      <th>Score Maze 1</th>
+      <th>Score Maze 2</th>
+      <th>Score Maze 3</th>
+      <th>Description</th>
+    </tr>
+    <tr>
+      <td>Random</td>
+      <td>Random</td>
+      <td>Not available</td>
+      <td>Not available</td>
+      <td>Not available</td>
+      <td>This combination is the worst of all at it is not assumed at all to find the goal twice. The resulst show that it has not found the goal evene once after 5 trials.</td>
+    </tr>
+    <tr>
+      <td>Random</td>
+      <td>AStar</td>
+      <td>Not available</td>
+      <td>Not available</td>
+      <td>Not available</td>
+      <td>This combination lead also to no end result at all as after 5 trials the random controller has not found the goal in the first run </td>
+    </tr>
+    <tr>
+      <td>Random</td>
+      <td>DP</td>
+      <td>Not available</td>
+      <td>Not available</td>
+      <td>Not available</td>
+      <td>This combination lead also to no end result at all as after 5 trials the random controller has not found the goal in the first run </td>
+    </tr>
+    <tr>
+      <td>Recursive</td>
+      <td>Recursive</td>
+      <td>63.133</td>
+      <td>74.033</td>
+      <td>100.067</td>
+      <td>This combination leads alawys to the same results of trials.</td>
+    </tr>
+    <tr>
+      <td>Recursive</td>
+      <td>A Star</td>
+      <td>37.133</td>
+      <td>52.033</td>
+      <td>68.067</td>
+      <td>This combination leads alawys to the same results of trials.</td>
+    </tr>
+    <tr>
+      <td>Recursive</td>
+      <td>DP</td>
+      <td>37.133</td>
+      <td>52.033</td>
+      <td>66.067</td>
+      <td>This combination leads alawys to the same results of trials.</td>
+    </tr>
+    <tr>
+      <td>A Star</td>
+      <td>A Star</td>
+      <td>36.133</td>
+      <td>50.467</td>
+      <td>63.100</td>
+      <td>This combination leads alawys to the same results of trials.</td>
+    </tr>
+    <tr>
+      <td>A Star</td>
+      <td>DP</td>
+      <td>36.133</td>
+      <td>50.467</td>
+      <td>61.100</td>
+      <td>This combination leads alawys to the same results of trials.</td>
+    </tr>
+  </tbody>
+</table>
+
+
 ### Justification
 In this section, your model’s final solution and its results should be compared to the benchmark you established earlier in the project using some type of statistical analysis. You should also justify whether these results and the solution are significant enough to have solved the problem posed in the project. Questions to ask yourself when writing this section:
 - _Are the final results found stronger than the benchmark result reported earlier?_
