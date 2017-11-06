@@ -928,7 +928,7 @@ As iwe have a combination of two phases and therefor different combinations i wa
       <td>63.133</td>
       <td>74.033</td>
       <td>100.067</td>
-      <td>This combination leads alawys to the same results of trials.</td>
+      <td>This combination leads always to the same results for each trial.</td>
     </tr>
     <tr>
       <td>Recursive</td>
@@ -936,7 +936,7 @@ As iwe have a combination of two phases and therefor different combinations i wa
       <td>37.133</td>
       <td>52.033</td>
       <td>68.067</td>
-      <td>This combination leads alawys to the same results of trials.</td>
+      <td>This combination leads always to the same results for each trial.</td>
     </tr>
     <tr>
       <td>Recursive</td>
@@ -944,7 +944,7 @@ As iwe have a combination of two phases and therefor different combinations i wa
       <td>37.133</td>
       <td>52.033</td>
       <td>66.067</td>
-      <td>This combination leads alawys to the same results of trials.</td>
+      <td>This combination leads always to the same results for each trial.</td>
     </tr>
     <tr>
       <td>A Star</td>
@@ -952,7 +952,7 @@ As iwe have a combination of two phases and therefor different combinations i wa
       <td>36.133</td>
       <td>50.467</td>
       <td>63.100</td>
-      <td>This combination leads alawys to the same results of trials.</td>
+      <td>This combination leads always to the same results for each trial.</td>
     </tr>
     <tr>
       <td>A Star</td>
@@ -960,10 +960,203 @@ As iwe have a combination of two phases and therefor different combinations i wa
       <td>36.133</td>
       <td>50.467</td>
       <td>61.100</td>
-      <td>This combination leads alawys to the same results of trials.</td>
+      <td>This combination leads always to the same results for each trial.</td>
     </tr>
   </tbody>
 </table>
+
+
+
+As you can see are the `A Star` and `DP` Algorithms best approxiate models for searching whereas `DP` does a slightly better job in Maze 3 compared to `A Star`. Disdavantage of `DP`how i implemented it is that it cannot be used for exploration.
+
+Following i want to give some exemplary considerations on the model used based on `Maze1`
+
+
+**RECURSIVE - Maze 1**
+```
+Starting run 0.
+PATH by recursive
+['u', 'u', 'u', 'u', 'u', 'u', 'u', 'u', 'u', 'u', 'u', 'r', 'd', 'r', 'd', 'd', 'r', 'u', 'u', 'u', 'r', 'r', 'r', 'r', 'd', 'r', 'r', 'r', 'u', 'r', 'd', 'd', 'd', 'l', 'l', 'd', 'd', 'd', 'r', 'u', 'u', 'r', 'd', 'd', 'd', 'd', 'l', 'l', 'l', 'u', 'u', 'u', 'u', 'l', 'd', 'l']
+
+PATH length: 56
+Coverage: 0.944444444444
+
+Ending first run. Starting next run.
+Starting run 1.
+Goal found; run 1 completed!
+Task complete! Score: 63.133
+[['>' 'v' ' ' '>' '>' '>' '>' 'v' ' ' ' ' '>' 'v']
+ ['^' '>' 'v' '^' ' ' ' ' ' ' '>' '>' '>' '^' 'v']
+ ['^' ' ' 'v' '^' ' ' ' ' ' ' ' ' ' ' ' ' ' ' 'v']
+ ['^' ' ' '>' '^' ' ' ' ' ' ' ' ' ' ' 'v' '<' '<']
+ ['^' ' ' ' ' ' ' ' ' ' ' ' ' 'v' '<' 'v' '>' 'v']
+ ['^' ' ' ' ' ' ' ' ' ' ' '*' '<' '^' 'v' '^' 'v']
+ ['^' ' ' ' ' ' ' ' ' ' ' ' ' ' ' '^' '>' '^' 'v']
+ ['^' ' ' ' ' ' ' ' ' ' ' ' ' ' ' '^' ' ' ' ' 'v']
+ ['^' ' ' ' ' ' ' ' ' ' ' ' ' ' ' '^' '<' '<' '<']
+ ['^' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ']
+ ['^' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ']
+ ['^' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ']]
+```
+
+Focusing on the recusrive apporach you can see that we have a very high coverage of the map. Compared to the best path this is far away from being optimal but we can state out that thhis approach will always find the goal, applicable for all 3 Mazes.
+
+
+
+**A STAR - Maze 1**
+```
+Starting run 0.
+PATH by astar
+['u', 'u', 'u', 'u', 'u', 'u', 'r', 'r', 'd', 'r', 'd', 'r', 'u', 'u', 'u', 'u', 'r', 'u', 'r', 'r', 'r', 'u', 'r', 'd', 'd', 'l', 'd', 'l', 'd', 'l', 'l']
+
+PATH length: 31
+Coverage: 0.736111111111
+
+Ending first run. Starting next run.
+Starting run 1.
+Goal found; run 1 completed!
+Task complete! Score: 36.133
+[[' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ']
+ [' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' '>' 'v' ' ' ' ']
+ [' ' ' ' ' ' ' ' ' ' '>' '>' '>' '^' 'v' ' ' ' ']
+ [' ' ' ' ' ' ' ' '>' '^' ' ' ' ' 'v' '<' ' ' ' ']
+ [' ' ' ' ' ' ' ' '^' ' ' ' ' 'v' '<' ' ' ' ' ' ']
+ ['>' '>' 'v' ' ' '^' ' ' '*' '<' ' ' ' ' ' ' ' ']
+ ['^' ' ' '>' 'v' '^' ' ' ' ' ' ' ' ' ' ' ' ' ' ']
+ ['^' ' ' ' ' '>' '^' ' ' ' ' ' ' ' ' ' ' ' ' ' ']
+ ['^' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ']
+ ['^' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ']
+ ['^' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ']
+ ['^' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ']]
+```
+
+This apporach is much better in optaining the desired results. But compared to the best model we can see that it still not optimal. We have the same path length as the optimal path but related to possible moves this would be much higher.
+
+**A STAR /  DP - Maze 1**
+```
+Starting run 0.
+PATH by dp
+['u', 'u', 'u', 'u', 'u', 'u', 'r', 'r', 'd', 'r', 'd', 'r', 'u', 'u', 'u', 'u', 'r', 'u', 'r', 'r', 'r', 'u', 'r', 'd', 'd', 'l', 'd', 'l', 'd', 'l', 'l']
+
+PATH length: 31
+Coverage: 0.736111111111
+
+Ending first run. Starting next run.
+Starting run 1.
+Goal found; run 1 completed!
+Task complete! Score: 36.133
+[[' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ']
+ [' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' '>' 'v' ' ' ' ']
+ [' ' ' ' ' ' ' ' ' ' '>' '>' '>' '^' 'v' ' ' ' ']
+ [' ' ' ' ' ' ' ' '>' '^' ' ' ' ' 'v' '<' ' ' ' ']
+ [' ' ' ' ' ' ' ' '^' ' ' ' ' 'v' '<' ' ' ' ' ' ']
+ ['>' '>' 'v' ' ' '^' ' ' '*' '<' ' ' ' ' ' ' ' ']
+ ['^' ' ' '>' 'v' '^' ' ' ' ' ' ' ' ' ' ' ' ' ' ']
+ ['^' ' ' ' ' '>' '^' ' ' ' ' ' ' ' ' ' ' ' ' ' ']
+ ['^' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ']
+ ['^' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ']
+ ['^' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ']
+ ['^' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ']]
+```
+
+We get the same results as single `A Star` approach. Now we can compare to the combination `Recursive DP`
+
+**Recursive / DP - Maze 1**
+```
+Starting run 0.
+PATH by dp
+['u', 'u', 'u', 'u', 'u', 'u', 'r', 'r', 'd', 'r', 'd', 'r', 'u', 'u', 'u', 'u', 'r', 'u', 'r', 'r', 'r', 'u', 'r', 'd', 'd', 'l', 'd', 'l', 'd', 'l', 'l']
+
+PATH length: 31
+Coverage: 0.944444444444
+
+Ending first run. Starting next run.
+Starting run 1.
+Goal found; run 1 completed!
+Task complete! Score: 37.133
+[[' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ']
+ [' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' '>' 'v' ' ' ' ']
+ [' ' ' ' ' ' ' ' ' ' '>' '>' '>' '^' 'v' ' ' ' ']
+ [' ' ' ' ' ' ' ' '>' '^' ' ' ' ' 'v' '<' ' ' ' ']
+ [' ' ' ' ' ' ' ' '^' ' ' ' ' 'v' '<' ' ' ' ' ' ']
+ ['>' '>' 'v' ' ' '^' ' ' '*' '<' ' ' ' ' ' ' ' ']
+ ['^' ' ' '>' 'v' '^' ' ' ' ' ' ' ' ' ' ' ' ' ' ']
+ ['^' ' ' ' ' '>' '^' ' ' ' ' ' ' ' ' ' ' ' ' ' ']
+ ['^' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ']
+ ['^' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ']
+ ['^' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ']
+ ['^' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ']]
+```
+ here we can see that we get the same walking path (as this is in my implementation the shortest assumed path) but the score is slightly higher as the recursive exploration step took longer.
+ 
+
+Finally i want to show the differences between single `A Star` and `A STar / DP` combination on Maze 3.
+
+**A STAR - Maze 3**
+```
+Starting run 0.
+PATH by astar
+['u', 'u', 'u', 'r', 'r', 'u', 'u', 'u', 'l', 'd', 'l', 'u', 'u', 'u', 'u', 'u', 'r', 'u', 'r', 'u', 'u', 'r', 'r', 'r', 'd', 'r', 'd', 'r', 'u', 'r', 'u', 'r', 'd', 'r', 'r', 'r', 'd', 'd', 'r', 'r', 'd', 'l', 'l', 'l', 'd', 'd', 'l', 'd', 'l', 'l', 'u', 'u', 'l']
+
+PATH length: 53
+Coverage: 0.72265625
+
+Ending first run. Starting next run.
+Starting run 1.
+Goal found; run 1 completed!
+Task complete! Score: 63.100
+[[' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ']
+ [' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ']
+ [' ' ' ' '>' '>' '>' 'v' ' ' ' ' '>' 'v' ' ' ' ' ' ' ' ' ' ' ' ']
+ [' ' ' ' '^' ' ' ' ' '>' 'v' '>' '^' '>' '>' '>' 'v' ' ' ' ' ' ']
+ [' ' '>' '^' ' ' ' ' ' ' '>' '^' ' ' ' ' ' ' ' ' 'v' ' ' ' ' ' ']
+ ['>' '^' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' '>' '>' 'v' ' ']
+ ['^' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' 'v' '<' '<' '<' ' ']
+ ['^' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' 'v' ' ' ' ' ' ' ' ']
+ ['^' ' ' ' ' ' ' ' ' ' ' ' ' ' ' '*' ' ' 'v' '<' ' ' ' ' ' ' ' ']
+ ['^' 'v' '<' ' ' ' ' ' ' ' ' ' ' '^' '<' '<' ' ' ' ' ' ' ' ' ' ']
+ ['^' '<' '^' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ']
+ [' ' ' ' '^' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ']
+ ['>' '>' '^' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ']
+ ['^' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ']
+ ['^' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ']
+ ['^' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ']]
+```
+
+**A STAR /  DP - Maze 3**
+```
+Starting run 0.
+PATH by dp
+['u', 'u', 'u', 'r', 'r', 'u', 'l', 'l', 'u', 'u', 'u', 'u', 'u', 'u', 'r', 'u', 'r', 'u', 'u', 'r', 'r', 'r', 'd', 'r', 'd', 'r', 'u', 'r', 'u', 'r', 'd', 'r', 'r', 'r', 'd', 'd', 'r', 'r', 'd', 'l', 'l', 'l', 'd', 'd', 'l', 'd', 'l', 'l', 'u', 'u', 'l']
+
+PATH length: 51
+Coverage: 0.72265625
+
+Ending first run. Starting next run.
+Starting run 1.
+Goal found; run 1 completed!
+Task complete! Score: 61.100
+[[' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ']
+ [' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ']
+ [' ' ' ' '>' '>' '>' 'v' ' ' ' ' '>' 'v' ' ' ' ' ' ' ' ' ' ' ' ']
+ [' ' ' ' '^' ' ' ' ' '>' 'v' '>' '^' '>' '>' '>' 'v' ' ' ' ' ' ']
+ [' ' '>' '^' ' ' ' ' ' ' '>' '^' ' ' ' ' ' ' ' ' 'v' ' ' ' ' ' ']
+ ['>' '^' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' '>' '>' 'v' ' ']
+ ['^' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' 'v' '<' '<' '<' ' ']
+ ['^' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' 'v' ' ' ' ' ' ' ' ']
+ ['^' ' ' ' ' ' ' ' ' ' ' ' ' ' ' '*' ' ' 'v' '<' ' ' ' ' ' ' ' ']
+ ['^' ' ' ' ' ' ' ' ' ' ' ' ' ' ' '^' '<' '<' ' ' ' ' ' ' ' ' ' ']
+ ['^' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ']
+ ['^' '<' '<' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ']
+ ['>' '>' '^' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ']
+ ['^' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ']
+ ['^' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ']
+ ['^' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ']]
+```
+
+The coverage is the same as we use the `A Star` exploration step but comparing the path lengts we can se the difference. In ters of machine learning we could say that `DP` generalizes the model in a better way as it find a better and faster path.
+
+But regarding following Justification i want to state out one important topic. My models only alows to move one single cell, that is why the length of the path is always compared to the fastest moves in my models. Comparing this to the benchmark is important in the next section.
 
 
 ### Justification
@@ -971,6 +1164,8 @@ In this section, your model’s final solution and its results should be compare
 - _Are the final results found stronger than the benchmark result reported earlier?_
 - _Have you thoroughly analyzed and discussed the final solution?_
 - _Is the final solution significant enough to have solved the problem?_
+
+----
 
 
 ## V. Conclusion
