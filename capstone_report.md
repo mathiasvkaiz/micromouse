@@ -24,17 +24,13 @@ The simulated virtual robot mouse and the virtual maze are given as a simplified
 To find an optimal (and fastest way) to the destination the mouse needs to perform two runs from starting location to final destination. On the first run the robot is allowed to explore the environment and create a map of the maze. It needs to find the goal in this attemp but it still can explore the environment afterwards. In the second run the robot starts again from starting point and hast to find the goal as fast as possible.
 
 Steps to take and how to achieve
-- Find the goal -> Localization and motion (in the first run)
-- Get to know the structure of the maze -> Filters (first and several other runs)
-- Evaluate best paths -> Search, Control
+- Find the goal
+- Get to know the structure of the maze
+- Evaluate best paths -> searching algorithms
+
+To get as fast as possible to the destination the robot needs to perform steering and movement according to the calculated path based on the mapped maze.
 
 
---> Functions, logic and model for learning from several runs
-
-
-**
-- It needs to know the sturcture of the maze, so it will map the maze (walls, paths, deadends) until it finds the defined destination.
-- After that the mouse will peform several runs from the starting point to explore the best and fastest pathes available. the mouse uses what it has learned from the runs before. **
 
 
 
