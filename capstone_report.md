@@ -1181,6 +1181,8 @@ In this section, you will need to provide some form of visualization that emphas
 
 ![alt text](images/path_moves_comparison.png "Path and Moves Comparison")
 
+This images shows an essential part of reaching benchmark model. It shows on the left hand side the best path for maze 1. But as the robot can move 3 cells in one timestep the overall moves are less then the overall path length. As described in the `Model Evaluation and Validation` section above my model use 3 steps at one time step. That is why i cannot reach the benchmark with this actual implementation. This is also important for even more complex mazes. Imagin a very complex maze, where many timesteps are consumed to find the goal at all (even with a heuristic exploration approach). taking one or 3 steps in considering the best path will be crucial for generalizing the model to every given maze.
+
 ### Reflection
 In this section, you will summarize the entire end-to-end problem solution and discuss one or two particular aspects of the project you found interesting or difficult. You are expected to reflect on the project as a whole to show that you have a firm understanding of the entire process employed in your work. Questions to ask yourself when writing this section:
 - _Have you thoroughly summarized the entire process you used for this project?_
