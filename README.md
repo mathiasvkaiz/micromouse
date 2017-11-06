@@ -31,7 +31,8 @@ In this project, you will create functions to control a virtual robot to navigat
   ```python showmaze.py test_maze_01.txt```
 - The script uses the turtle module to visualize the maze; you can click on the window with the visualization after drawing is complete to close the window.
 
-- You can use specific algorithms with each given maze.
+
+You can use specific algorithms with each given maze.
 
 ```sh run.sh astar astar 01```
 
