@@ -175,11 +175,440 @@ In this section, all of your preprocessing steps will need to be clearly documen
 - _Based on the **Data Exploration** section, if there were abnormalities or characteristics that needed to be addressed, have they been properly corrected?_
 - _If no preprocessing is needed, has it been made clear why?_
 
+-----
+
+As stated out in the Project Description we have perfection world, meaning perfect movement and perfect sensing. So i do not need to regard probabilities and techniques for acting on not perfect sensing and do not need to implement techniques to react on movement issues. This means that i do not have regarded Data Preprocessing.
+
+
 ### Implementation
 In this section, the process for which metrics, algorithms, and techniques that you implemented for the given data will need to be clearly documented. It should be abundantly clear how the implementation was carried out, and discussion should be made regarding any complications that occurred during this process. Questions to ask yourself when writing this section:
 - _Is it made clear how the algorithms and techniques were implemented with the given datasets or input data?_
 - _Were there any complications with the original metrics or techniques that required changing prior to acquiring a solution?_
 - _Was there any part of the coding process (e.g., writing complicated functions) that should be documented?_
+
+--------
+
+The code is structured into several python files. Following files are used for the project and will be sicussed briefly.
+- globals.py - includes several helper variables and directories
+- map.py - maps the maze and checks for unknown and permissable locations
+- plan.py - main planner class including all relevant algorithm/techniques for exploring and searching
+- robot.py - the main robot class and calculation the next move
+
+
+```
+# globals.py
+dir_mazes = {'maze1': 'test_maze_01.txt',
+            'maze2': 'test_maze_02.txt',
+            'maze3': 'test_maze_03.txt'}
+testmaze = Maze( str(dir_mazes[_maze]) )
+
+
+#####################
+_maze = 'maze1'
+_timespan = 100
+_maxtimespan = 1000
+
+_init = [0, 0]
+_distance = [0, 1, 2, 3]
+_steering = ['left', 'front', 'right']
+_dir_steering_to_rotation = {'left': -90, 'front': 0, 'right': 90}
+_dir_steering_to_sensor_index = {'left': 0, 'front': 1, 'right': 2}
+
+_dir_map_value = {'N': 1, 'E': 2, 'S': 4 , 'W': 8 }
+
+_heading = ['u', 'r', 'd', 'l']
+_dir_heading_to_map = {'u': 'N', 'r': 'E', 'd': 'S', 'l': 'W',
+                       'up': 'N', 'right': 'E', 'down': 'S', 'left': 'W'}
+_dir_int = {'u': 1, 'r': 2, 'd': 4, 'l': 8,
+            'up': 1, 'right': 2, 'down': 4, 'left': 8}
+
+_dir_heading_to_symbol = {'u': '^', 'r': '>', 'd': 'v', 'l': '<',
+                          'up': '^', 'right': '>', 'down': 'v', 'left': '<'}
+
+
+_dir_sensors = {'u': ['l', 'u', 'r'], 'r': ['u', 'r', 'd'],
+               'd': ['r', 'd', 'l'], 'l': ['d', 'l', 'u'],
+               'up': ['l', 'u', 'r'], 'right': ['u', 'r', 'd'],
+               'down': ['r', 'd', 'l'], 'left': ['d', 'l', 'u']}
+_dir_move = {'u': [0, 1], 'r': [1, 0], 'd': [0, -1], 'l': [-1, 0],
+            'up': [0, 1], 'right': [1, 0], 'down': [0, -1], 'left': [-1, 0]}
+_dir_steering_cost = {'u': 20, 'r': 20, 'd': 20, 'l': 20,
+            'up': 20, 'right': 20, 'down': 20, 'left': 20}
+_dir_reverse = {'u': 'd', 'r': 'l', 'd': 'u', 'l': 'r',
+               'up': 'd', 'right': 'l', 'down': 'u', 'left': 'r'}
+```
+
+As you can see there are several directories used as helpers for transforming different states (e.g. Steering into direction or direction into movement). This helpers are used all over the projects code.
+
+
+
+```
+# map.py
+
+class Map(object):
+    def __init__(self, map_dim):
+        '''
+        Use the initialization function to set up attributes
+        '''
+
+        self.map_dim = map_dim
+        self.grid = [[-1 for col in range(map_dim)] for row in range(map_dim)]
+        self.visited = [[-1 for col in range(map_dim)] for row in range(map_dim)]
+        self.moved = [[' ' for col in range(map_dim)] for row in range(map_dim)]
+        
+        
+        
+    def reset(self):
+        '''
+        Resets properties that are used in following runs
+        '''
+        
+        self.visited = [[-1 for col in range(self.map_dim)] for row in range(self.map_dim)]
+        self.moved = [[' ' for col in range(self.map_dim)] for row in range(self.map_dim)]
+        
+        
+        
+    def is_permissible(self, cell, direction):
+        """
+        Returns a boolean designating whether or not a cell is passable in the
+        given direction. Cell is input as a list. Directions may be
+        input as single letter 'u', 'r', 'd', 'l', or complete words 'up', 
+        'right', 'down', 'left'.
+        """
+        
+        if self.is_unknown(cell):
+            return False
+        
+        try:
+            return (self.grid[cell[0]][cell[1]] & globals._dir_int[direction] != 0)
+        except:
+            print cell, direction, ' is a wall!'
+           
+        
+        
+    def is_unknown(self, cell):
+        '''
+        Checks if a given cell is unknown (not yet explored/visited)
+        '''
+        
+        return self.grid[cell[0]][cell[1]] == -1
+        
+        
+        
+    def expand(self, location, heading, sensors):
+        '''
+        Expand function that documents explored cells
+        '''
+        
+        value = 0
+        # check sensor steering
+        for direction in globals._steering:
+            if sensors[globals._dir_steering_to_sensor_index[direction]] > 0:
+                i = globals._dir_map_value[globals._dir_heading_to_map[globals._dir_sensors[heading][globals._dir_steering_to_sensor_index[direction]]]]
+                value += i
+                
+        # map reverse if not at starting position
+        if (location != globals._init):
+            value += globals._dir_map_value[globals._dir_heading_to_map[globals._dir_reverse[heading]]]
+        
+        # set value
+        if self.grid[location[0]][location[1]] == -1:
+            self.grid[location[0]][location[1]] = value
+            
+            
+            
+    def check_coverage(self):
+        '''
+        Calcluates the exploration coverage of the map
+        '''
+        unique, counts = np.unique(self.visited, return_counts=True)
+        dir_coverage = dict(zip(unique, counts))
+        total = np.prod(np.array(self.visited).shape)
+        
+        if float(dir_coverage[1]) / float(total) >= 0.7:
+            return True
+        else:
+            return False 
+```
+
+The robot uses the map class to track the visited spots, checks wheather directions are permissable and where it already have moved and where not. This class is also used to calulate the total coverage of the map exploration.
+
+
+
+```
+# plan.py
+# extraction
+class Plan(object):
+    
+    def __init__(self, robot, cost = 1):
+        '''
+        Use the initialization function to set up attributes
+        '''
+        
+        self.robot = robot
+        self.map = robot.map
+        self.grid_size = len(robot.map.grid[0])
+        
+        self.start = robot.get_start()
+        self.init = robot.location
+        self.set_goal()
+        
+        self.is_exploring = True
+        self.is_goal_reached = False
+        self.is_looking_for_start = False
+        
+        self.cost = cost
+        self.make_heuristic()
+        
+        self.path = []
+        self.path_to_goal = [] # used for some algorithms like recursive
+        self.policy = []
+        self.expand = []
+       
+    
+    
+    def reset(self):
+        '''
+        Resets properties that are used in following runs
+        '''
+        
+        self.start = self.robot.get_start()
+        self.init = self.robot.location
+        self.set_goal()
+        
+        self.is_exploring = False
+        self.is_goal_reached = False
+        self.is_looking_for_start = False
+        
+        self.path = []
+        self.policy = []
+        self.expand = []
+        
+     
+    
+    def set_goal(self, goal_type='Goal'):
+        '''
+        Calculate goal function for a grid
+        '''
+        
+        if goal_type == 'Goal':
+            self.goal = [self.grid_size/2 - 1, self.grid_size/2]
+        elif goal_type == 'Start':
+            self.goal = self.robot.start
+            
+    
+    
+    def set_goal_reached(self):
+        '''
+        Calculated for goal reach
+        '''
+        
+        self.is_goal_reached = self.robot.location[0] in self.goal and self.robot.location[1] in self.goal
+    
+    
+    
+    def set_steering_by_path(self, idx = 0):
+        '''
+        Returns steering angle for given heading
+        '''
+        
+        steering = globals._steering[1]
+        
+        if len(self.path) > 0:
+            try:
+                for direction in globals._steering:
+                    if globals._dir_sensors[self.robot.heading][globals._dir_steering_to_sensor_index[direction]] == self.path[idx]:
+                        steering = direction
+            except IndexError:
+                print('--- No path segmet found ---')     
+        else:
+            print('--- No path found ---')
+                    
+        return steering
+    
+    
+    
+    def check_movement(self, path_step, heading):
+        '''
+        Checks if we need to do a reverse movement
+        '''
+        if globals._dir_reverse[heading] == path_step:
+            return -1
+        else:
+            return 1
+    
+    
+    
+    def make_heuristic(self):
+        '''
+        Make heuristic function for a grid
+        '''
+        
+        self.heuristic = [[0 for row in range(self.grid_size)] 
+                          for col in range(self.grid_size)]
+        
+        for i in range(self.grid_size):    
+            for j in range(self.grid_size):
+                self.heuristic[i][j] = abs(i - self.goal[0]) + abs(j - self.goal[1])
+```
+
+```
+# A Star 
+def astar_search(self, init, is_path):
+        '''
+        A* search for goal
+        '''
+        
+        # Init arrays
+        closed = [[0 for col in range(self.grid_size)] for row in range(self.grid_size)]
+        closed[init[0]][init[1]] = 1
+        expand = [[-1 for col in range(self.grid_size)] for row in range(self.grid_size)]
+        action = [[-1 for col in range(self.grid_size)] for row in range(self.grid_size)]
+
+        # Init parameters
+        x = init[0]
+        y = init[1]
+        g = 0
+        h = self.heuristic[x][y]
+        f = g + h
+
+        found = False
+        resign = False
+        count = 0
+        
+        # Set open on beginning of algorithm
+        open = [[f, h, g, x, y]]
+        
+        # Loop while goal is not found or stuck
+        while not found and not resign:
+            
+            # Goal found
+            if len(open) == 0:
+                resign = True
+                print ("Failed as not path found")
+            
+            # Goal not yet found
+            else:
+                open.sort()
+                open.reverse()
+                next = open.pop()
+                x = next[3]
+                y = next[4]
+                g = next[2]
+
+                expand[x][y] = count
+                count += 1
+
+                # check if we are done
+                if x == self.goal[0] and y == self.goal[1]:
+                    found = True
+
+                else:
+                    for i in range(len(globals._heading)):
+                        heading = globals._dir_move[globals._heading[i]]
+                        
+                        x2 = x
+                        y2 = y
+
+                        # check if we can proceed or if unknown
+                        if is_path:
+                            if self.map.is_permissible([x2, y2], globals._heading[i]):
+                                x2 = x + heading[0]
+                                y2 = y + heading[1]
+
+                                if  x2 >= 0 and x2 < self.grid_size and y2 >= 0 and y2 < self.grid_size:
+                                    if closed[x2][y2] == 0:
+                                        # Steering is accounted with higher costs
+                                        # to support direct movements
+                                        if globals._dir_move[self.robot.heading] == heading:
+                                            g2 = g + self.cost
+                                        else:
+                                            g2 = g + globals._dir_steering_cost[globals._heading[i]]
+
+                                        h2 = self.heuristic[x2][y2]
+                                        f2 = g2 + h2
+                                        open.append([f2, h2, g2, x2, y2])
+                                        closed[x2][y2] = 1
+                                        action[x2][y2] = i
+                        else:
+                            if self.map.is_permissible([x2, y2], globals._heading[i]) or self.map.is_unknown([x2, y2]):
+                                x2 = x + heading[0]
+                                y2 = y + heading[1]
+
+                                if  x2 >= 0 and x2 < self.grid_size and y2 >= 0 and y2 < self.grid_size:
+                                    if closed[x2][y2] == 0:
+                                        # Steering is accounted with higher costs
+                                        # to support direct movements
+                                        if self.robot.heading == heading:
+                                            g2 = g + self.cost
+                                        else:
+                                            g2 = g + globals._dir_steering_cost[globals._heading[i]]
+
+                                        h2 = self.heuristic[x2][y2]
+                                        f2 = g2 + h2
+                                        open.append([f2, h2, g2, x2, y2])
+                                        closed[x2][y2] = 1
+                                        action[x2][y2] = i
+        
+        
+        # Set optimal policy
+        policy = [[' ' for col in range(self.grid_size)] for row in range(self.grid_size)]
+        x = self.goal[0]
+        y = self.goal[1]
+        policy[x][y] = 'x'
+        
+        # Set optimal path
+        invpath = []
+        while x != init[0] or y != init[1]:
+            x2 = x - globals._dir_move[globals._heading[action[x][y]]][0]
+            y2 = y - globals._dir_move[globals._heading[action[x][y]]][1]
+            policy[x2][y2] = globals._dir_heading_to_symbol[globals._heading[action[x][y]]]
+            invpath.append(globals._heading[action[x][y]])
+            x = x2
+            y = y2
+            
+        path = []
+        for i in range(len(invpath)):
+            path.append(invpath[len(invpath) - 1 - i])
+            
+        # Return path, policy and expand arrays
+        return path, policy, expand
+    
+    
+    
+    def astar(self, path=False):
+        '''
+        A* main
+        '''
+           
+        # reset plan in case of path finding (not exploring) 
+        if path:
+            self.reset()
+            
+        if self.heuristic == []:
+            raise ValueError, "Heuristic must be defined to run A*"
+        
+        # perform a* search
+        self.path, self.policy, self.expand = self.astar_search(self.init, path)
+        
+        # set steering
+        if len(self.path) != 0:   
+            steering = self.set_steering_by_path()
+        
+        # differentiate between path searching or next steering
+        if path:
+            # return optimal path and policy
+            return self.path, self.policy
+        else:
+            # check for reverse movement
+            movement = self.check_movement(self.path[0], self.robot.heading)
+            
+            # return steering direction and movement
+            return steering, movement
+```
+
+This class implements all necessary methods for planning. This includes checking for goal reached, plan movement forward or backwards, translate steering into heading, set steering by given path element and so on. It also impements all algorithm/techniques for exploration and search phase. An extraction of the whole class is shown above including the A Star implementation.
+
 
 ### Refinement
 In this section, you will need to discuss the process of improvement you made upon the algorithms and techniques you used in your implementation. For example, adjusting parameters for certain models to acquire improved solutions would fall under the refinement category. Your initial and final solutions should be reported, as well as any significant intermediate results as necessary. Questions to ask yourself when writing this section:
