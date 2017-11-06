@@ -35,7 +35,7 @@ In this project, you will create functions to control a virtual robot to navigat
 
 ```sh run.sh astar astar 01```
 
-run.sh script with given astar exploration, astar search algorithm on maze 02.
+run.sh script with given astar exploration, astar search algorithm on maze 01.
 
 Following parameter combinations are possible (01 is maze number and applicable to 02 and 03 as well):
 - random random 01
