@@ -1,5 +1,5 @@
 # Machine Learning Engineer Nanodegree
-## Capstone Project
+## Capstone Project, Plot and Navigate a Virtual Maze
 Mathias von Kaiz  
 August 1st, 2017
 
@@ -128,9 +128,31 @@ The handling of these pitfalls will be discussed in the next chapter.
 
 ### Algorithms and Techniques
 In this section, you will need to discuss the algorithms and techniques you intend to use for solving the problem. You should justify the use of each one based on the characteristics of the problem and the problem domain. Questions to ask yourself when writing this section:
-- _Are the algorithms you will use, including any default variables/parameters in the project clearly defined?_
-- _Are the techniques to be used thoroughly discussed and justified?_
-- _Is it made clear how the input data or datasets will be handled by the algorithms and techniques chosen?_
+
+This project is separated into two different phase. The first phase (Exploration) is to explore the maze with the goal to reach the defined destination. In the second phase (Search) the robot should calculate the shortest path and get to the destination as fast as possible.
+
+For both phases i have defined different techniques and algorithms to accomplish each phase.
+
+In Exploration Phase i tried out following techniques/algorithms:
+- Random Move
+- Recursive Move
+- A Star / heuristic
+
+Random Move just checks that it will not move into a wall. But there is not recording of former visited spots or dead ends. So the chance that the robot will get the destination is somehow small. As there is no tracking this technique is not useful to for search phase as it would not lead to desired results. This technique is the base to justfy that the movement and sensing is working properly.
+
+Recursive Move is an adoption of the Recusrive Backtracker algorithm. As we do not have a fully explored Maze yet (that would enable us to use the recursive search algorith) i adopted the concept for exploring an unknown maze. We track all visited spots and do not visit these spots again. Alos the robot paints a line behind itself. If the robot reaches a dead end or a corner qhere he already visited all possible directions he will rease one sport behind him (and move back to this point and checks if there are still open spots. If not, he will again erase one spot behin him and move back and so on. This will be done until he reaches an open direction and proceed in this direction. It will reach the oal but not necessarily the fastest way.
+
+A Star is somehow a heuristic apporach where it wants to take the shortest way (even if not explored yet). In case it can proceed (no wall) will follow the assumed shortest heuristic way. In case it cannot proceed it recalulates based on sensing which new direction to take and adjusts the new heuristic values to the new path. 
+
+In Search Phase i tried out following techniques/algorithms
+- Recursive Search
+- A Star
+- Dynamic Programming
+
+Recursive Search is not fully implemented here (for the sake of simplicity). As i assum, that the recursive path is already taken (drawing lines behind itself and erasing dead end lines -> drawing new lins) we get a path to through the maze (assumed to be the same as having search recursively). So i only take the path tracked in Explore Phase and follow it. That is whay recursive search cannot be combined with other exploration techniques at the moment.
+
+Dynamic Programming algorith is based on the Lecture of "Artifical Intelligence for Robotics" and just like A Star it gives the shortest path. It outputs from every location the shortest path to be taken. It can be used for every start location meaning that is suitable to react on different situations and changing starting locations (like in a self driving car). Is used this technique to be compared with A Star.
+
 
 ### Benchmark
 In this section, you will need to provide a clearly defined benchmark result or threshold for comparing across performances obtained by your solution. The reasoning behind the benchmark (in the case where it is not an established result) should be discussed. Questions to ask yourself when writing this section:
