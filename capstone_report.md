@@ -1168,6 +1168,9 @@ In this section, your model’s final solution and its results should be compare
 ----
 
 
+In my opinion the solution worked out here (`A Star / DP` combination) is not as optimal as the benchmark related to the 'fastest step' parameter but is as the path length. So we have a slightly weaker result in total. In my opinion the 'A Star / DP' approach is a string combination an can be adopted to other mazes as well. Also it is possible to react on new situations like changing locations in mazes as the DP algorithm is designed for this (e.g. Left Turn Policy Problem). Here it outperforms the single 'A Star' approach. The reason why it does not beat the benachmark is a known issue in the overall issue in the model as it only allows one step at the time and not three. But in my opinion it is sigificant enough to solve the problem (if i would rely on the 'Recursive' apporach this would definetively not the case as the moves and the path length as well as the risk of running out time steps in much more complex mazes would increase) 
+
+
 ## V. Conclusion
 _(approx. 1-2 pages)_
 
@@ -1184,6 +1187,16 @@ In this section, you will summarize the entire end-to-end problem solution and d
 - _Were there any difficult aspects of the project?_
 - _Does the final model and solution fit your expectations for the problem, and should it be used in a general setting to solve these types of problems?_
 
+----
+
+The whole process was somehow Trial and Error related to many aspects of the project. I started to implement the `A Star` algoritmh as it was teached in the `Artifical Intelligence for Robotics` class. This worked quite well for me until i realized that this algorithm will only work on an entire known maze. Using it on teh whole map was quite easy. But what happens in case i don't know the maze yet. This was very challanging for me as i needed to implement a method to map the maze. There was the `Map` class derived of. After that i had another challenge adopting the 'A Star' algorithm to an unknown maze. 
+
+When i got this results i started implementing the `DP` algorithm not knwoing that it will deliver the same results as the `A Star` approach. So i had to find other methods as well. I started to get in toudh with different algorithm and finally came up with ethe recursive one. In my opinion it was a good compromise between somehow structured and somehow random.
+
+Two aspects were/are definitevly the most challeging one. On the one hand all the transformations and translations from steering to heading, planning the direction and planning the movement (foward and backwards) was very hard to accomplish for me. Also what is still an open issue is the planning of the path combined with multiple movements in one time frame. This is something i did't finalize yet. That is why my benchmark is not reached and my expectations are not fully reached although i would say that this solution could be used to solve these types of problems at least in a good manner.
+
+
+
 ### Improvement
 In this section, you will need to provide discussion as to how one aspect of the implementation you designed could be improved. As an example, consider ways your implementation can be made more general, and what would need to be modified. You do not need to make this improvement, but the potential solutions resulting from these changes are considered and compared/contrasted to your current solution. Questions to ask yourself when writing this section:
 - _Are there further improvements that could be made on the algorithms or techniques you used in this project?_
@@ -1191,6 +1204,11 @@ In this section, you will need to provide discussion as to how one aspect of the
 - _If you used your final solution as the new benchmark, do you think an even better solution exists?_
 
 -----------
+
+As i have already stated out a major improvement would be to enable the model to deal with 3 movements at one timestep. This would increase the performance and the model could be generalized to much more complex mazes related to restricted time steps. Also we assume a perfect world. I you look in to the `Artifical Intelligence for Robotics` class there are much more approaches and techniques to be used for generalization and transformation the whole model into real world. We would need to consider errors in sensors, erros in movements, continous spaces and so on. 
+This takes a lot more effort to be realized and therefor this solution can only be used in this perfect world scenario.
+
+
 
 **Before submitting, ask yourself. . .**
 
