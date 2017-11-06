@@ -31,6 +31,20 @@ In this project, you will create functions to control a virtual robot to navigat
   ```python showmaze.py test_maze_01.txt```
 - The script uses the turtle module to visualize the maze; you can click on the window with the visualization after drawing is complete to close the window.
 
+- You can use specific algorithms with each given maze.
+
+```sh run.sh astar astar 01```
+
+run.sh script with given astar exploration, astar search algorithm on maze 02.
+
+Following parameter combinations are possible (01 is maze number and applicable to 02 and 03 as well):
+- random random 01
+- recursive recursive 01
+- recursive astar 01
+- recursive dp 01
+- astar astar 01
+- astar dp 01
+
 ### Project Description
 #### Maze Specifications
 - The maze exists on an n x n grid of squares, n even. 
