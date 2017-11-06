@@ -143,14 +143,27 @@ class Robot(object):
 #             self.plan.path, self.plan.policy = self.plan.recursive(True)
             
             # Debug Reports
-            print ('MOVED by ' + self.explorer_name) 
-            print (np.rot90(self.map.moved))
+            # print ('MOVED by ' + self.explorer_name) 
+            # print (np.rot90(self.map.moved))
             
-            print ('') 
-            print ('') 
+            # print ('') 
+            # print ('') 
             
+            #print ('POLICY by ' + self.search_name) 
+            #print (np.rot90(self.plan.policy))
+
+            #print ('') 
+
             print ('PATH by ' + self.search_name) 
-            print (np.rot90(self.plan.policy))
+            print(self.plan.path)
+            #print ('\n'.join(str(p) for p in self.plan.path))
+
+            print ('') 
+
+            print ('PATH length: ' + str(len(self.plan.path)))
+            print ('Coverage: ' + str(self.map.coverage))
+
+            print ('') 
             
         
             # Reset map

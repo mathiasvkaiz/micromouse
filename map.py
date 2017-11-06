@@ -14,6 +14,7 @@ class Map(object):
         self.grid = [[-1 for col in range(map_dim)] for row in range(map_dim)]
         self.visited = [[-1 for col in range(map_dim)] for row in range(map_dim)]
         self.moved = [[' ' for col in range(map_dim)] for row in range(map_dim)]
+        self.coverage = 0.0
         
         
         
@@ -86,7 +87,9 @@ class Map(object):
         dir_coverage = dict(zip(unique, counts))
         total = np.prod(np.array(self.visited).shape)
         
-        if float(dir_coverage[1]) / float(total) >= 0.7:
+        self.coverage = float(dir_coverage[1]) / float(total)
+
+        if self.coverage >= 0.7:
             return True
         else:
             return False 
