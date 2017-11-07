@@ -4,61 +4,36 @@ Mathias von Kaiz
 August 1st, 2017
 
 ## I. Definition
-_(approx. 1-2 pages)_
 
 ### Project Overview
 This project is based on the Micromouse competition in which a small robot mouse needs to solve a virtual maze. This means that the mouse needs to find a way from the starting position to a defined destination position (e.g center of maze or exit) completely by its own.
 
 The goal is to reach the destination point as fast as possible. This project covers all relevant technical steps for a simulated virtual robot mouse to achieve this goal in a virtual maze.
 
+
 ### Problem Statement
-_In this section, you will want to clearly define the problem that you are trying to solve, including the strategy (outline of tasks) you will use to achieve the desired solution. You should also thoroughly discuss what the intended solution will be for this problem. Questions to ask yourself when writing this section:_
-- _Is the problem statement clearly defined? Will the reader understand what you are expecting to solve?_
-- _Have you thoroughly discussed how you will attempt to solve the problem?_
-- _Is an anticipated solution clearly defined? Will the reader understand what results you are looking for?_
+The simulated virtual robot mouse and the virtual maze are given as a simplified model. So what is left for the problem statement is the question, what needs to be done that the mouse finds the fastest way to a defined destination? 
 
-----
+To find an optimal and fastest way to the destination the mouse needs to perform two runs from starting location to final destination. On the first run the robot is allowed to explore the environment and create a map of the maze. It needs to find the goal in this attemp but it still can explore the environment afterwards. In the second run the robot starts again from starting point and hast to find the goal as fast as possible.
 
-The simulated virtual robot mouse and the virtual maze are given as a simplified model (code base). So what is left for the problem statement is the question, what needs to be done that the mouse finds the fastest way to a defined destination? 
-
-To find an optimal (and fastest way) to the destination the mouse needs to perform two runs from starting location to final destination. On the first run the robot is allowed to explore the environment and create a map of the maze. It needs to find the goal in this attemp but it still can explore the environment afterwards. In the second run the robot starts again from starting point and hast to find the goal as fast as possible.
-
-Steps to take and how to achieve
-- Find the goal
+Steps to take and how to solve the problem:
 - Get to know the structure of the maze
-- Evaluate best paths -> searching algorithms
+- Find the goal
+- Evaluate best paths based on searching algorithms
 
 To get as fast as possible to the destination the robot needs to perform steering and movement according to the calculated path based on the mapped maze.
 
 
-
-
-
 ### Metrics
-In this section, you will need to clearly define the metrics or calculations you will use to measure performance of a model or result in your project. These calculations and metrics should be justified based on the characteristics of the problem and problem domain. Questions to ask yourself when writing this section:
-- _Are the metrics you’ve chosen to measure the performance of your models clearly discussed and defined?_
-- _Have you provided reasonable justification for the metrics chosen based on the problem and solution?_
+Since the robot mouse is expected to find the destination spot as fast as possible (having only two runs) there one important metric -> needed time steps. The rules allow two runs only and that the robot can explore the maze in the first run as long as it wants (maximum of 1000 steps for first and second run together). Therefore the second run is the main scoring run meaning that each time step in the second run counts as one. The first run is considered one thirtieth the number of time steps needed additionaly.
 
-----
-
-Since the robot mouse is expected to find the destination spot as fast as possible (having only two runs) the evaluation of the score will be on one important metric -> needed time steps. The rules allow two runs only and that the robot can explore the maze in the first run as long as it wants (maximum of 1000 steps for first and second run together). Therefore the second run is the main scoring run meaning that each time step in the second run counts as one. The first run is considered one thirtieth the number of time steps needed additionaly.
-
-In my opinion for this scenario there is no need regard other metrics. We have a clear defined rule set and a clear defined goal. We don't need to evaluate other metrics like safety or realibility (as for the smartcab scenario). If the robot is driving into a wall it increases the needed points and has therefor already a penalty on scoring. It also has to reach the goal in the given time frame (1000 steps) otherwise it was not successful. 
+In my opinion for this scenario there is no need regard other metrics. We have a clear defined rule set and a clear defined goal. We don't need to evaluate other metrics like safety or realibility (as for the smartcab scenario). If the robot is driving into a wall it increases the needed points and has therefore already a penalty on scoring. It also has to reach the goal in the given time frame (1000 steps) otherwise it was not successful. 
 
 
 ## II. Analysis
-_(approx. 2-4 pages)_
 
 ### Data Exploration
-In this section, you will be expected to analyze the data you are using for the problem. This data can either be in the form of a dataset (or datasets), input data (or input files), or even an environment. The type of data should be thoroughly described and, if possible, have basic statistics and information presented (such as discussion of input features or defining characteristics about the input or environment). Any abnormalities or interesting qualities about the data that may need to be addressed have been identified (such as features that need to be transformed or the possibility of outliers). Questions to ask yourself when writing this section:
-- _If a dataset is present for this problem, have you thoroughly discussed certain features about the dataset? Has a data sample been provided to the reader?_
-- _If a dataset is present for this problem, are statistics about the dataset calculated and reported? Have any relevant results from this calculation been discussed?_
-- _If a dataset is **not** present for this problem, has discussion been made about the input space or input data for your problem?_
-- _Are there any abnormalities or characteristics about the input space or dataset that need to be addressed? (categorical variables, missing values, outliers, etc.)_
-
-----
-
-The project is based on three test mazes each represented by an even grid of squares. Each maze is fully surrounded by walls. Beside the outside walls each square can have multiple walls that block movement. Starting point is always placed in the bottom-left corner and has a right, a bottom and a left wall opened to the top. The robot will start facing upwards. The goal room is placed inside the center of the maze and has a size of 2x2 squares.
+The project is based on three test mazes each represented by an even grid of squares. Each maze is fully surrounded by walls. Beside the outside walls each square can have multiple walls that block movement. Starting point is always placed in the bottom-left corner and has a right, a bottom and a left wall. The maze is opened to the top. The robot will start facing upwards. The goal room is placed inside the center of the maze and has a size of 2x2 squares.
 
 The dataset for this project is delivered in 3 comma seperated text files defining the test mazes. 
 First line of the dataset defines the number of squares for witdh and height of the maze.
@@ -78,29 +53,19 @@ For example, if we have a number 10 in the text file this means that this square
 (10 = 0*1 + 1*2 + 0*4 + 1*8).
 Starting point has a 1 as we only have an opening upwards (1 = 1*1 + 0*2 + 0*4 + 0*8)
 
-For additional input data the robot has three obstacles sensors in direction to right, left and upwards. These sensors can detect the number of open squares in each sensor direction or recognizes walls. On each time step the robot can rotate clockwise or counterclockwise for ninety degrees. After that it moves up to three squares in that or opposite (backwards) direction. After the movement the next time step starts and the sensors return new data.
+For additional input data the robot has three obstacle sensors in direction to right, left and upwards. These sensors can detect the number of open squares in each sensor direction or recognizes walls. On each time step the robot can rotate clockwise or counterclockwise for ninety degrees. After that it moves up to three squares in that or opposite (backwards) direction. After the movement the next time step starts and the sensors return new data.
 
 Movement of the robot is assumed to be perfect (no path deviation) and if the robot moves into a wall it stays where it was.
 
-Based on the robots behaviour you can see (numbers from 0 to 30 in Maze1 plot) that the minimum steps for the optimal path is 30 squares. As the robot can move 3 squares in one time step we get an optimal time period of 17 time steps to find the goal. 
-
-
 
 ### Exploratory Visualization
-In this section, you will need to provide some form of visualization that summarizes or extracts a relevant characteristic or feature about the data. The visualization should adequately support the data being used. Discuss why this visualization was chosen and how it is relevant. Questions to ask yourself when writing this section:
-- _Have you visualized a relevant characteristic or feature about the dataset or input data?_
-- _Is the visualization thoroughly analyzed and discussed?_
-- _If a plot is provided, are the axes, title, and datum clearly defined?_
-
------
-
-Based on the description about the dataset in the chapter before you can see the mapping from bit-wise numbering to maze structure:
-
+Based on the description about the dataset in the chapter before you can see the mapping from bit-wise numbering to maze structure in following images:
 
 Maze 1 Structure | Maze 1 Plot 
 --- | --- 
 ![alt text](images/test_maze1.png "Test Maze 1 Structure")| ![alt text](images/test_maze1_plot.png "Test Maze 1 plot")
 
+Based on the robots behaviour you can see (numbers from 0 to 30 in Maze1 plot) that the minimum steps for the optimal path is 30 squares. As the robot can move 3 squares in one time step we get an optimal time period of 17 time steps to find the goal. 
 
 
 Maze 2 Structure | Maze 2 Plot 
@@ -117,39 +82,31 @@ Maze 3 Structure | Maze 3 Plot
 You can see that the number data reflects the similar structure on striking spots. For example the edges are having all the same structure and shape so we can see same number in the structure files -> orange spots.
 In the red shaped areas you can see the according walls and opening definitions for the center 2x2 goal square (*The first row defines the leftmost column of the maze whereas the last row of the text file defines the rightmost column of the maze, so you can turn the structure file in an -90 degree angle to get the corresponding plot structure*).
 
-In addition possible pitfalls could cause some unwanted behaviour to the agent. For example, the violet marked ovals represent dead ends where the robot can only move in one direction. Another pitfall could be that (green ovals) infinite loops could occur as the robot moves in circles. 
-
-The handling of these pitfalls will be discussed in the next chapter.
+In addition possible pitfalls could cause some unwanted behaviour to the robot. For example, the violet marked ovals represent dead ends where the robot can only move in one direction. Another pitfall could be that (green ovals) infinite loops could occur as the robot moves in circles. 
 
 
 ### Algorithms and Techniques
-In this section, you will need to discuss the algorithms and techniques you intend to use for solving the problem. You should justify the use of each one based on the characteristics of the problem and the problem domain. Questions to ask yourself when writing this section:
+This project is separated into two different phases. The first phase (**Exploration**) is to explore the maze with the goal to reach the defined destination. In the second phase (**Search**) the robot should calculate the shortest path and get to the destination as fast as possible. For both phases i have defined different techniques and algorithms to accomplish each phase.
 
------
-
-This project is separated into two different phase. The first phase (Exploration) is to explore the maze with the goal to reach the defined destination. In the second phase (Search) the robot should calculate the shortest path and get to the destination as fast as possible.
-
-For both phases i have defined different techniques and algorithms to accomplish each phase.
-
-In Exploration Phase i tried out following techniques/algorithms:
+In **Exploration Phase** i tried out following techniques/algorithms:
 - Random Move
 - Recursive Move
 - A Star / heuristic
 
-Random Move just checks that it will not move into a wall. But there is not recording of former visited spots or dead ends. So the chance that the robot will get the destination is somehow small. As there is no tracking this technique is not useful to for search phase as it would not lead to desired results. This technique is the base to justfy that the movement and sensing is working properly.
+`Random Move` just checks that it will not move into a wall. But there is not recording of former visited spots or dead ends. So the chance that the robot will get the destination is somehow small. As there is no tracking this technique is not useful to for search phase as it would not lead to desired results. This technique is the base to justfy that the movement and sensing is working properly. The risk that it gets stuck in the above mentioned pitfalls like dead ends and circle rotation is very high.
 
-Recursive Move is an adoption of the Recusrive Backtracker algorithm. As we do not have a fully explored Maze yet (that would enable us to use the recursive search algorith) i adopted the concept for exploring an unknown maze. We track all visited spots and do not visit these spots again. Alos the robot paints a line behind itself. If the robot reaches a dead end or a corner qhere he already visited all possible directions he will rease one sport behind him (and move back to this point and checks if there are still open spots. If not, he will again erase one spot behin him and move back and so on. This will be done until he reaches an open direction and proceed in this direction. It will reach the oal but not necessarily the fastest way.
+`Recursive Move` is an adoption of the `Recusrive Backtracker` algorithm. As we do not have a fully explored Maze yet (that would enable us to use the recursive search algorithm) i adopted the concept for exploring an unknown maze. All visited spots are tracked and the robot avoids to visit these spots again. Also the robot 'paints' a line behind itself. If the robot reaches a dead end or a corner where it cannot move into unvisited new cells it will erease one sport behind him and move back to this point and checks if there are still open spots. If not, it will again erase one spot behind it and move back. This means it moves back the drawn line until it reaches an open direction and proceeds in this direction. It will reach the goal but not necessarily the fastest way.
 
-A Star is somehow a heuristic apporach where it wants to take the shortest way (even if not explored yet). In case it can proceed (no wall) will follow the assumed shortest heuristic way. In case it cannot proceed it recalulates based on sensing which new direction to take and adjusts the new heuristic values to the new path. 
+`A Star` is somehow a heuristic apporach where it wants to take the shortest way even if not explored yet. In case it can proceed (no wall) will follow the assumed shortest heuristic way. In case it cannot proceed it recalulates, based on new sensor results, which new direction to take and adjusts the new heuristic values to the new path. 
 
-In Search Phase i tried out following techniques/algorithms
+In **Search Phase** i tried out following techniques/algorithms
 - Recursive Search
 - A Star
 - Dynamic Programming
 
-Recursive Search is not fully implemented here (for the sake of simplicity). As i assum, that the recursive path is already taken (drawing lines behind itself and erasing dead end lines -> drawing new lins) we get a path to through the maze (assumed to be the same as having search recursively). So i only take the path tracked in Explore Phase and follow it. That is whay recursive search cannot be combined with other exploration techniques at the moment.
+`Recursive Search` is not fully implemented here (for the sake of simplicity). I have assumed that the recursive path is already taken (drawing lines behind itself and erasing dead end lines -> drawing new lins) we get a path through the maze (assumed to be the same as having search recursively). The tracked path out of **Explore Phase** is followed by the robot. That is whay recursive search cannot be combined with other exploration techniques at the moment. It needs to rely on the tracked path on not on an upcoming policy (path to be taken in future steps).
 
-Dynamic Programming algorith is based on the Lecture of "Artifical Intelligence for Robotics" and just like A Star it gives the shortest path. It outputs from every location the shortest path to be taken. It can be used for every start location meaning that is suitable to react on different situations and changing starting locations (like in a self driving car). Is used this technique to be compared with A Star.
+`Dynamic Programming` algorithm is based on the Lecture of "Artifical Intelligence for Robotics" and just like `A Star` it gives the shortest path. The output is he shortest path to be taken from every possible location. It can be used for every start location meaning that is suitable to react on different situations and changing starting locations (like in a self driving car). I use this technique to compare benchmarks with `A Star`. The discadvantage of `DP` is that a completely known maze is prerequesite. With the given algorith out of the lecture a unknown maze cannot be explored. That is why i need to combine this algorithm with some exploring algorithm from above.
 
 
 ### Benchmark
