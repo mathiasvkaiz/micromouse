@@ -97,7 +97,7 @@ In **Exploration Phase** i tried out following techniques/algorithms:
 
 `Recursive Move` is an adoption of the `Recusrive Backtracker` algorithm. As we do not have a fully explored Maze yet (that would enable us to use the recursive search algorithm) i adopted the concept for exploring an unknown maze. All visited spots are tracked and the robot avoids to visit these spots again. Also the robot 'paints' a line behind itself. If the robot reaches a dead end or a corner where it cannot move into unvisited new cells it will erease one sport behind him and move back to this point and checks if there are still open spots. If not, it will again erase one spot behind it and move back. This means it moves back the drawn line until it reaches an open direction and proceeds in this direction. It will reach the goal but not necessarily the fastest way.
 
-`A Star` is somehow a heuristic apporach where it wants to take the shortest way even if not explored yet. In case it can proceed (no wall) will follow the assumed shortest heuristic way. In case it cannot proceed it recalulates, based on new sensor results, which new direction to take and adjusts the new heuristic values to the new path. 
+`A Star` is somehow a heuristic apporach where it wants to take the shortest way even if not explored yet. In case it can proceed (no wall) will follow the assumed shortest heuristic way. In case it cannot proceed it recalulates, based on new sensor results, which new direction to take and adjusts the new heuristic values to the new path. Every visited cell is tracked and all open and known cells are marked for expansion. this means the robot will try a path and in case it gets into an dead end it moves back to the still open (and marked for expansion) cels and ries out new and unknown cells from there. That is why pitfalls like dead ends and circles are no issue for this algorithm.
 
 In **Search Phase** i tried out following techniques/algorithms
 - Recursive Search
@@ -106,42 +106,23 @@ In **Search Phase** i tried out following techniques/algorithms
 
 `Recursive Search` is not fully implemented here (for the sake of simplicity). I have assumed that the recursive path is already taken (drawing lines behind itself and erasing dead end lines -> drawing new lins) we get a path through the maze (assumed to be the same as having search recursively). The tracked path out of **Explore Phase** is followed by the robot. That is whay recursive search cannot be combined with other exploration techniques at the moment. It needs to rely on the tracked path on not on an upcoming policy (path to be taken in future steps).
 
-`Dynamic Programming` algorithm is based on the Lecture of "Artifical Intelligence for Robotics" and just like `A Star` it gives the shortest path. The output is he shortest path to be taken from every possible location. It can be used for every start location meaning that is suitable to react on different situations and changing starting locations (like in a self driving car). I use this technique to compare benchmarks with `A Star`. The discadvantage of `DP` is that a completely known maze is prerequesite. With the given algorith out of the lecture a unknown maze cannot be explored. That is why i need to combine this algorithm with some exploring algorithm from above.
+`A Star` algorith is based on the Lecture of "Artifical Intelligence for Robotics". Like the `DP` algorith it needs to know as much as possible or even all of the maze to get the best path. It makrs each open cell for expansion giving each expanded cell a value (called the G-Value) this value defines the sequence of cells to be epxanded. The smalles one will be expanded next. All already expanded cells are marked as closed. This algorithm in combination with a complete known maze gives the shortest path.
+
+`Dynamic Programming` algorithm is also based on the Lecture of "Artifical Intelligence for Robotics" and just like `A Star` it gives the shortest path. The output is he shortest path to be taken from every possible location. It can be used for every start location meaning that is suitable to react on different situations and changing starting locations (like in a self driving car). I use this technique to compare benchmarks with `A Star`. The discadvantage of `DP` is that a completely known maze is prerequesite. With the given algorith out of the lecture a unknown maze cannot be explored. That is why i need to combine this algorithm with some exploring algorithm from above.
 
 
 ### Benchmark
-In this section, you will need to provide a clearly defined benchmark result or threshold for comparing across performances obtained by your solution. The reasoning behind the benchmark (in the case where it is not an established result) should be discussed. Questions to ask yourself when writing this section:
-- _Has some result or value been provided that acts as a benchmark for measuring performance?_
-- _Is it clear how this result or value was obtained (whether by data or by hypothesis)?_
-
-----
-
-The different combinations of Explor and Search algorithm/techniques will be compared based on the reached score. For benchmark i assume to have A Star Exploration and A Star Search. This will be evaluated and proofed in a later chapter.
+The different combinations of **Explore** and **Search** algorithm/techniques will be compared based on the reached score. For benchmark assumed for this Project  is the `A Star` Exploration and `A Star` Search algorithm. This will be evaluated in a later chapter.
 
 
 ## III. Methodology
-_(approx. 3-5 pages)_
 
 ### Data Preprocessing
-In this section, all of your preprocessing steps will need to be clearly documented, if any were necessary. From the previous section, any of the abnormalities or characteristics that you identified about the dataset will be addressed and corrected here. Questions to ask yourself when writing this section:
-- _If the algorithms chosen require preprocessing steps like feature selection or feature transformations, have they been properly documented?_
-- _Based on the **Data Exploration** section, if there were abnormalities or characteristics that needed to be addressed, have they been properly corrected?_
-- _If no preprocessing is needed, has it been made clear why?_
-
------
-
-As stated out in the Project Description we have perfection world, meaning perfect movement and perfect sensing. So i do not need to regard probabilities and techniques for acting on not perfect sensing and do not need to implement techniques to react on movement issues. This means that i do not have regarded Data Preprocessing.
+As stated out in the Project Description we have perfection world, meaning perfect movement and perfect sensing. So i do not need to regard probabilities and techniques for acting on not perfect sensing. There is no need to implement techniques to react on movement issues as well. That is why Data Preprocessing methods are not regarded in this project.
 
 
 ### Implementation
-In this section, the process for which metrics, algorithms, and techniques that you implemented for the given data will need to be clearly documented. It should be abundantly clear how the implementation was carried out, and discussion should be made regarding any complications that occurred during this process. Questions to ask yourself when writing this section:
-- _Is it made clear how the algorithms and techniques were implemented with the given datasets or input data?_
-- _Were there any complications with the original metrics or techniques that required changing prior to acquiring a solution?_
-- _Was there any part of the coding process (e.g., writing complicated functions) that should be documented?_
-
---------
-
-The code is structured into several python files. Following files are used for the project and will be sicussed briefly.
+The code is structured into several python files. Following files are used for the project and will be dicussed briefly:
 - globals.py - includes several helper variables and directories
 - map.py - maps the maze and checks for unknown and permissable locations
 - plan.py - main planner class including all relevant algorithm/techniques for exploring and searching
@@ -285,6 +266,7 @@ class Map(object):
 ```
 
 The robot uses the map class to track the visited spots, checks wheather directions are permissable and where it already have moved and where not. This class is also used to calulate the total coverage of the map exploration.
+
 
 
 
@@ -560,7 +542,10 @@ def astar_search(self, init, is_path):
             return steering, movement
 ```
 
-This class implements all necessary methods for planning. This includes checking for goal reached, plan movement forward or backwards, translate steering into heading, set steering by given path element and so on. It also impements all algorithm/techniques for exploration and search phase. An extraction of the whole class is shown above including the A Star implementation.
+This class implements all necessary methods for planning. This includes checking for goal reached, plan movement forward or backwards, translate steering into heading, set steering by given path element and so on. It also impements all algorithm/techniques for exploration and search phase. An extraction of the class is shown above including the `A Star` implementation.
+
+
+
 
 
 ```
@@ -796,39 +781,22 @@ class Robot(object):
         return rotation, movement
 ```
 This class is the main robot class combining map and plan together and performing the next move. It checks the possible movement and steering befor it propagates the movement and steering to the tester method.
-It also tracks the timesteps and coverage and based on these parameters decides what to do. Eg. on an coverage of 70% or time steps left of 100 it switches from exploration to search mode.
+It also tracks the timesteps and coverage and based on these parameters decides what to do. On a coverage of 70% of the map visited or 100 time steps left it switches from exploration to search mode and propagates that it will finsh the first run. After that the given/calculated path is followed as Run 2 will then start.
 
 
 ### Refinement
-In this section, you will need to discuss the process of improvement you made upon the algorithms and techniques you used in your implementation. For example, adjusting parameters for certain models to acquire improved solutions would fall under the refinement category. Your initial and final solutions should be reported, as well as any significant intermediate results as necessary. Questions to ask yourself when writing this section:
-- _Has an initial solution been found and clearly reported?_
-- _Is the process of improvement clearly documented, such as what techniques were used?_
-- _Are intermediate and final solutions clearly reported as the process is improved?_
+In this project there were so many refinemnets steps that it is not possible to show all steps here in this report. (Please refer to the commit history for all refinements). I want to state out two major refinement steps were necessary to get the robot working.
 
+In a first apporach the robot was not able to move backwards. It was only able to move forwards. In combination with the sensing into three directions 'left', 'right' and 'forward' this lead to a major issues especially in dead ends for 'Recursive Explorarion'. Just to recapitulate the 'Resursive Exploration' the robot moves back to a former cell in case there are no open possibilities left. But how could i solve this without enabling the robot to move backwards. You can see the improvments in the `plan.py` in `check_movement()`. 
 
------
-
-In this project there were so many refinemnets steps that it is not possible to show all steps here in this report. (Please refer to the commit history for all refiement insights) I want to state out two major refinement steps that needs to be done to get the robot working.
-
-In one first apporach the robot was not able to move backwards. It was only able to move forwards. In combination with the sensing into three directions 'left', 'right' and 'forward' this lead to a major issues especially in dead ends for 'Recursive Explorarion'. Just to recapitulate the 'Resursive Exploration' moves back to a fromer cell in case there are no open possibilities lieft. But how could i solve this without enabling the robot to move backwards. You can see the improvments in the `plan.py`in `check_movement()`. 
-
-Another refinement done by me was the extension of the 'A Star Exploration' algorithm by heuristic values. The 'A Star Search' algorithm is used for known mazes. I wanted to adopt this algorith for a unknon maze, so that it could explore the maze based on heuristic values. This means that it will calculate the expetced distance from the actual position to the destination. Based on these values it decides which cell to move next to. In case the cell is not permissable it recalclates (based on the ne sensor results) a new path. You can see the improvments in the `plan.py` in `make_heuristic()` and `astar_search()`. 
+Another refinement done was the extension of the `A Star` Exploration algorithm by heuristic values. The '`A Star` Search algorithm is used for known mazes. I wanted to adopt this algorithm for a unknown maze, so that it could explore the maze based on heuristic (distance) values. This means that it will calculate the expected distance from the actual position to the destination. Based on these values it decides which cell to move next (the oe with the shortest assumed distance). In case the cell is not permissable it recaluclates based on the new sensor results a new path. You can see the improvements in the `plan.py` in `make_heuristic()` and `astar_search()`. 
 
 
 
 ## IV. Results
-_(approx. 2-3 pages)_
 
 ### Model Evaluation and Validation
-In this section, the final model and any supporting qualities should be evaluated in detail. It should be clear how the final model was derived and why this model was chosen. In addition, some type of analysis should be used to validate the robustness of this model and its solution, such as manipulating the input data or environment to see how the model’s solution is affected (this is called sensitivity analysis). Questions to ask yourself when writing this section:
-- _Is the final model reasonable and aligning with solution expectations? Are the final parameters of the model appropriate?_
-- _Has the final model been tested with various inputs to evaluate whether the model generalizes well to unseen data?_
-- _Is the model robust enough for the problem? Do small perturbations (changes) in training data or the input space greatly affect the results?_
-- _Can results found from the model be trusted?_
-
--------
-
-As pointed out in Section `Exploratory Visualization` the following results are considered as best fitting model.
+As pointed out in Section `Exploratory Visualization` the following results are considered as best fitting model as a result by `A Star` algorithm.
 
 Maze | Path Length | Fastes Moves
 --- | --- | --- 
@@ -836,11 +804,11 @@ Maze | Path Length | Fastes Moves
 2 | 43 | 23
 3 | 49 | 25
 
+These results are dervived from the Maze structures and best pathes and were tried out seperately on the whole known maze.
+Therefor now score can be given at this point as the algorithm relies on a known (or at least as much known as possible) maze. The score is related to the ovrall needed timsteps and especially to the seconds run path length / timesteps.It is a combination of the metric described in the Metrics Chapter above. This is why the path length and the moves taken are taken as benchmark here.
 
-As iwe have a combination of two phases and therefor different combinations i want to state out the results for each possible combination.
 
-
-
+Following table shows each possible combination of the two phases **Exploration** and **Search** and the achieved scores for each test maze:
 <table>
   <tbody>
     <tr>
@@ -919,10 +887,7 @@ As iwe have a combination of two phases and therefor different combinations i wa
 </table>
 
 
-
-As you can see are the `A Star` and `DP` Algorithms best approxiate models for searching whereas `DP` does a slightly better job in Maze 3 compared to `A Star`. Disdavantage of `DP`how i implemented it is that it cannot be used for exploration.
-
-Following i want to give some exemplary considerations on the model used based on `Maze1`
+As you can see the `A Star` and `DP` algorithms are best approxiate models. `DP` does a slightly better job in Maze 3 compared to `A Star`. In the following i want to give some exemplary considerations on the models used based on `Maze1`
 
 
 **RECURSIVE - Maze 1**
@@ -952,7 +917,7 @@ Task complete! Score: 63.133
  ['^' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ']]
 ```
 
-Focusing on the recusrive apporach you can see that we have a very high coverage of the map. Compared to the best path this is far away from being optimal but we can state out that thhis approach will always find the goal, applicable for all 3 Mazes.
+Focusing on the recursive apporach you can see that we have a very high coverage of the map. Compared to the best path this is far away from being optimal but we can state out that this approach will always find the goal (applicable for all 3 Mazes).
 
 
 
@@ -1012,7 +977,7 @@ Task complete! Score: 36.133
  ['^' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ']]
 ```
 
-We get the same results as single `A Star` approach. Now we can compare to the combination `Recursive DP`
+We get the same results as single `A Star` approach which is not suprising as the `DP`algrithm gives the shortest path as well.
 
 **Recursive / DP - Maze 1**
 ```
@@ -1040,10 +1005,10 @@ Task complete! Score: 37.133
  ['^' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ']
  ['^' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ']]
 ```
- here we can see that we get the same walking path (as this is in my implementation the shortest assumed path) but the score is slightly higher as the recursive exploration step took longer.
+Here you can see that we get the same walking path (this is assumed to be the shortest path in my implementation) but the score is slightly higher as the recursive exploration step took longer.
  
 
-Finally i want to show the differences between single `A Star` and `A STar / DP` combination on Maze 3.
+Finally i want to show the differences between single `A Star` and `A Star / DP` combination on Maze 3.
 
 **A STAR - Maze 3**
 ```
@@ -1107,75 +1072,31 @@ Task complete! Score: 61.100
  ['^' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ']]
 ```
 
-The coverage is the same as we use the `A Star` exploration step but comparing the path lengts we can se the difference. In ters of machine learning we could say that `DP` generalizes the model in a better way as it find a better and faster path.
+The coverage is the same as we use the `A Star` exploration step but comparing the path lengths we can see the difference. In terms of machine learning we could say that `DP` generalizes the model in a better way as it finds a better and faster path.
 
-But regarding following Justification i want to state out one important topic. My models only alows to move one single cell, that is why the length of the path is always compared to the fastest moves in my models. Comparing this to the benchmark is important in the next section.
+But regarding following Justification i want to state out one important topic. My models only allow to move one single cell, that is why the fastest moves count are always the same as the length of the path.
 
 
 ### Justification
-In this section, your model’s final solution and its results should be compared to the benchmark you established earlier in the project using some type of statistical analysis. You should also justify whether these results and the solution are significant enough to have solved the problem posed in the project. Questions to ask yourself when writing this section:
-- _Are the final results found stronger than the benchmark result reported earlier?_
-- _Have you thoroughly analyzed and discussed the final solution?_
-- _Is the final solution significant enough to have solved the problem?_
-
-----
-
-
-In my opinion the solution worked out here (`A Star / DP` combination) is not as optimal as the benchmark related to the 'fastest step' parameter but is as the path length. So we have a slightly weaker result in total. In my opinion the 'A Star / DP' approach is a string combination an can be adopted to other mazes as well. Also it is possible to react on new situations like changing locations in mazes as the DP algorithm is designed for this (e.g. Left Turn Policy Problem). Here it outperforms the single 'A Star' approach. The reason why it does not beat the benachmark is a known issue in the overall issue in the model as it only allows one step at the time and not three. But in my opinion it is sigificant enough to solve the problem (if i would rely on the 'Recursive' apporach this would definetively not the case as the moves and the path length as well as the risk of running out time steps in much more complex mazes would increase) 
+In my opinion the solution worked out (`A Star / DP`) is not as optimal as the benchmark related to the 'fastest moves' parameter. But it gets the same 'path length' meaning that we have slightly weaker results in total compared tothe benchmark. 
+This approach seems to work in general and can be adopted to other mazes as well. The reason why it does not beat the benachmark is a known issue in the overall implementation of the model as it allows only one step at each time frame (in benschmark three steps per frame can be performed). But it seems sigificant enough to solve the problem. In case i would rely on the `Recursive` apporach this would definetively not be the case as the the path length as well as the risk of running out time steps in much more complex mazes would increase. 
 
 
 ## V. Conclusion
-_(approx. 1-2 pages)_
 
 ### Free-Form Visualization
-In this section, you will need to provide some form of visualization that emphasizes an important quality about the project. It is much more free-form, but should reasonably support a significant result or characteristic about the problem that you want to discuss. Questions to ask yourself when writing this section:
-- _Have you visualized a relevant or important quality about the problem, dataset, input data, or results?_
-- _Is the visualization thoroughly analyzed and discussed?_
-- _If a plot is provided, are the axes, title, and datum clearly defined?_
-
-
-------
-
+This images shows an essential part for the benchmark model:
 ![alt text](images/path_moves_comparison.png "Path and Moves Comparison")
 
-This images shows an essential part of reaching benchmark model. It shows on the left hand side the best path for maze 1. But as the robot can move 3 cells in one timestep the overall moves are less then the overall path length. As described in the `Model Evaluation and Validation` section above my model use 3 steps at one time step. That is why i cannot reach the benchmark with this actual implementation. This is also important for even more complex mazes. Imagin a very complex maze, where many timesteps are consumed to find the goal at all (even with a heuristic exploration approach). taking one or 3 steps in considering the best path will be crucial for generalizing the model to every given maze.
+It shows on the left-hand side the best path for maze 1. But as the robot can move three cells in one timestep the overall moves are less then the overall path length. As described in the Model Evaluation and Validation section above my model uses one step at each time step. That is why i cannot reach the benchmark. This is also important for even more complex mazes. Imagine a very complex and big maze, where many timesteps are consumed to find the goal. Taking one or three steps at the same time would be crucial for generalizing the model to every given maze.
 
 ### Reflection
-In this section, you will summarize the entire end-to-end problem solution and discuss one or two particular aspects of the project you found interesting or difficult. You are expected to reflect on the project as a whole to show that you have a firm understanding of the entire process employed in your work. Questions to ask yourself when writing this section:
-- _Have you thoroughly summarized the entire process you used for this project?_
-- _Were there any interesting aspects of the project?_
-- _Were there any difficult aspects of the project?_
-- _Does the final model and solution fit your expectations for the problem, and should it be used in a general setting to solve these types of problems?_
+The whole process was somehow 'Trial and Error' related to many aspects of the project. I started to implement the `A Star` algorithm as it was teached in the `Artifical Intelligence for Robotics` class. This worked quite well for me until i realized that this algorithm will only work on an entire known maze. Using it on based on the whole map was quite easy. But what happens in case the maze is not known yet. This was very challanging for me as i needed to implement a method to map the maze. Here was the `Map` class derived of. Based on this new class i faced the next challenge. Adopting the algorithm to a unknown maze in combination with plotting the maze athe the same time. 
 
-----
+After solving this challenge i started implementing the `DP` algorithm not knowing that it will deliver the same results as the `A Star` approach. So i had to find other methods as well. I started to get in touch with different algorithms and finally came up with the recursive one. In my opinion it is a good compromise between structured and random behaviour.
 
-The whole process was somehow Trial and Error related to many aspects of the project. I started to implement the `A Star` algoritmh as it was teached in the `Artifical Intelligence for Robotics` class. This worked quite well for me until i realized that this algorithm will only work on an entire known maze. Using it on teh whole map was quite easy. But what happens in case i don't know the maze yet. This was very challanging for me as i needed to implement a method to map the maze. There was the `Map` class derived of. After that i had another challenge adopting the 'A Star' algorithm to an unknown maze. 
-
-When i got this results i started implementing the `DP` algorithm not knwoing that it will deliver the same results as the `A Star` approach. So i had to find other methods as well. I started to get in toudh with different algorithm and finally came up with ethe recursive one. In my opinion it was a good compromise between somehow structured and somehow random.
-
-Two aspects were/are definitevly the most challeging one. On the one hand all the transformations and translations from steering to heading, planning the direction and planning the movement (foward and backwards) was very hard to accomplish for me. Also what is still an open issue is the planning of the path combined with multiple movements in one time frame. This is something i did't finalize yet. That is why my benchmark is not reached and my expectations are not fully reached although i would say that this solution could be used to solve these types of problems at least in a good manner.
-
+Two aspects were definitevly the most challeging one. On the one hand all the transformations and translations from steering to heading, planning the direction and planning the movement (foward and backwards) were very hard to accomplish. This took quite a long time of testing and trying out to solve thiese issues. On the other hand what is still open is the planning of the path combined with multiple movements in one time frame. This is something i did't finalize yet. That is why my benchmark is not beaten and my expectations are not fully reached although i would say that this solution could be used to solve similar kinds of problems at least in a good manner.
 
 
 ### Improvement
-In this section, you will need to provide discussion as to how one aspect of the implementation you designed could be improved. As an example, consider ways your implementation can be made more general, and what would need to be modified. You do not need to make this improvement, but the potential solutions resulting from these changes are considered and compared/contrasted to your current solution. Questions to ask yourself when writing this section:
-- _Are there further improvements that could be made on the algorithms or techniques you used in this project?_
-- _Were there algorithms or techniques you researched that you did not know how to implement, but would consider using if you knew how?_
-- _If you used your final solution as the new benchmark, do you think an even better solution exists?_
-
------------
-
-As i have already stated out a major improvement would be to enable the model to deal with 3 movements at one timestep. This would increase the performance and the model could be generalized to much more complex mazes related to restricted time steps. Also we assume a perfect world. I you look in to the `Artifical Intelligence for Robotics` class there are much more approaches and techniques to be used for generalization and transformation the whole model into real world. We would need to consider errors in sensors, erros in movements, continous spaces and so on. 
-This takes a lot more effort to be realized and therefor this solution can only be used in this perfect world scenario.
-
-
-
-**Before submitting, ask yourself. . .**
-
-- Does the project report you’ve written follow a well-organized structure similar to that of the project template?
-- Is each section (particularly **Analysis** and **Methodology**) written in a clear, concise and specific fashion? Are there any ambiguous terms or phrases that need clarification?
-- Would the intended audience of your project be able to understand your analysis, methods, and results?
-- Have you properly proof-read your project report to assure there are minimal grammatical and spelling mistakes?
-- Are all the resources used for this project correctly cited and referenced?
-- Is the code that implements your solution easily readable and properly commented?
-- Does the code execute without error and produce results similar to those reported?
+As i have already stated out a major improvement would be to enable the model to deal with 3 movements at one timestep. This would increase the performance and the model could be generalized to much more complex mazes. As a perfect world is assumed in this scenario the `Artifical Intelligence for Robotics` class show much more approaches and techniques to be used for generalization and transformation the whole model into real world. I would need to consider errors in sensors, erros in movements, continous spaces and so on. This would take a lot more effort to be realized and therefore we have a high number of possible improvements for the future to generalize this whole model into real world. 
